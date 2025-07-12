@@ -8,6 +8,12 @@ const tweetsContainer = document.getElementById('tweetsContainer');
 const refreshBtn = document.getElementById('refreshBtn');
 const selectionStatusElement = document.getElementById('selectionStatus');
 const selectedTweetInfoElement = document.getElementById('selectedTweetInfo');
+const processBtn = document.getElementById('processBtn');
+const processingScreen = document.getElementById('processingScreen');
+const backBtn = document.getElementById('backBtn');
+const selectedTweetDisplay = document.getElementById('selectedTweetDisplay');
+const processingResult = document.getElementById('processingResult');
+const resultContent = document.getElementById('resultContent');
 
 // Function to update the status message
 function updateStatus(message) {
@@ -90,6 +96,120 @@ function updateSelectionStatus() {
     } else {
         selectionStatusElement.style.display = 'none';
     }
+}
+
+// Function to show processing screen
+function showProcessingScreen() {
+    if (selectedTweetIndex < 0) return;
+    
+    const selectedTweet = currentTweets[selectedTweetIndex];
+    
+    // Display the selected tweet in the processing screen
+    selectedTweetDisplay.innerHTML = `
+        <div class="tweet-header">
+            <span class="username">@${selectedTweet.username}</span>
+            <span class="timestamp">${formatTimestamp(selectedTweet.timestamp)}</span>
+        </div>
+        <div class="tweet-text">${escapeHtml(selectedTweet.text)}</div>
+        <div class="tweet-metrics">
+            <div class="metric">
+                <span>💬 ${selectedTweet.replies}</span>
+            </div>
+            <div class="metric">
+                <span>🔄 ${selectedTweet.retweets}</span>
+            </div>
+            <div class="metric">
+                <span>❤️ ${selectedTweet.likes}</span>
+            </div>
+        </div>
+    `;
+    
+    // Hide the main content and show processing screen
+    document.querySelector('.header').style.display = 'none';
+    refreshBtn.style.display = 'none';
+    statusElement.style.display = 'none';
+    selectionStatusElement.style.display = 'none';
+    tweetsContainer.style.display = 'none';
+    processingScreen.style.display = 'block';
+    
+    // Hide any previous results
+    processingResult.style.display = 'none';
+    
+    // Add event listeners to processing option buttons
+    const optionButtons = processingScreen.querySelectorAll('.option-btn');
+    optionButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const option = button.getAttribute('data-option');
+            processTweet(option);
+        });
+    });
+}
+
+// Function to hide processing screen
+function hideProcessingScreen() {
+    // Show the main content and hide processing screen
+    document.querySelector('.header').style.display = 'block';
+    refreshBtn.style.display = 'block';
+    statusElement.style.display = 'block';
+    tweetsContainer.style.display = 'block';
+    processingScreen.style.display = 'none';
+    
+    // Update selection status if there's still a selected tweet
+    updateSelectionStatus();
+}
+
+// Function to process tweet with selected option
+function processTweet(option) {
+    const selectedTweet = currentTweets[selectedTweetIndex];
+    
+    // Show loading state
+    resultContent.innerHTML = '<div class="loading">Processing tweet...</div>';
+    processingResult.style.display = 'block';
+    
+    // Simulate processing (replace with actual API calls later)
+    setTimeout(() => {
+        let result = '';
+        
+        switch (option) {
+            case 'analyze':
+                result = `Sentiment Analysis for @${selectedTweet.username}'s tweet:<br><br>
+                <strong>Overall Sentiment:</strong> Positive 😊<br>
+                <strong>Confidence:</strong> 85%<br>
+                <strong>Key Emotions:</strong> Joy, Excitement<br>
+                <strong>Analysis:</strong> This tweet expresses positive emotions with enthusiastic language and exclamation marks.`;
+                break;
+                
+            case 'summarize':
+                result = `Summary of @${selectedTweet.username}'s tweet:<br><br>
+                <strong>Main Point:</strong> ${selectedTweet.text.substring(0, 100)}${selectedTweet.text.length > 100 ? '...' : ''}<br>
+                <strong>Key Topics:</strong> Social media, engagement<br>
+                <strong>Length:</strong> ${selectedTweet.text.length} characters<br>
+                <strong>Engagement:</strong> ${selectedTweet.likes} likes, ${selectedTweet.retweets} retweets`;
+                break;
+                
+            case 'translate':
+                result = `Translation of @${selectedTweet.username}'s tweet:<br><br>
+                <strong>Original:</strong> ${escapeHtml(selectedTweet.text)}<br><br>
+                <strong>Spanish:</strong> ${escapeHtml(selectedTweet.text)} (simulated translation)<br>
+                <strong>French:</strong> ${escapeHtml(selectedTweet.text)} (simulated translation)<br>
+                <strong>German:</strong> ${escapeHtml(selectedTweet.text)} (simulated translation)`;
+                break;
+                
+            case 'fact-check':
+                result = `Fact Check for @${selectedTweet.username}'s tweet:<br><br>
+                <strong>Claim:</strong> ${escapeHtml(selectedTweet.text)}<br>
+                <strong>Verification Status:</strong> 🔍 Under Review<br>
+                <strong>Reliability Score:</strong> 7/10<br>
+                <strong>Sources:</strong> Multiple fact-checking databases consulted<br>
+                <strong>Note:</strong> This is a simulated fact-check result.`;
+                break;
+                
+            default:
+                result = 'Unknown processing option selected.';
+        }
+        
+        resultContent.innerHTML = result;
+    }, 2000); // Simulate 2-second processing time
 }
 
 // Function to display tweets
@@ -177,6 +297,8 @@ function handleMessage(message) {
 
 // Event listeners
 refreshBtn.addEventListener('click', requestTweets);
+processBtn.addEventListener('click', showProcessingScreen);
+backBtn.addEventListener('click', hideProcessingScreen);
 
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener(handleMessage);
