@@ -7,6 +7,9 @@ Then activate the environment:
 
 `source your_env/bin/activate`
 
+Then, once in your environment, install weave:
+
+`pip install weave`
 
 Then run `main.py`:
 
