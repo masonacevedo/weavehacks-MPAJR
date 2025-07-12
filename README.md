@@ -1,4 +1,13 @@
 # weavehacks-MPAJR
-In order to run main.py, first run
+In order to run `main.py`, first make a venv:
 
-`source weaveheacks_env/bin/activate`
+`python -m venv your_env`
+
+Then activate the environment:
+
+`source your_env/bin/activate`
+
+
+Then run `main.py`:
+
+`python main.py`
