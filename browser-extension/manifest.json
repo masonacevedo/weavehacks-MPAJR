@@ -1,0 +1,32 @@
+{
+    "name": "Weavehacks2025",
+    "manifest_version": 3,
+    "version": "1.0",
+    "description": "A browser extension that extracts and displays tweets from Twitter/X in a side panel",
+    "action": {
+        "default_title": "Weavehacks2025 - Tweet Viewer"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://*.twitter.com/*", "*://*.x.com/*"],
+            "js": ["content.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "side_panel": {
+        "default_path": "sidepanel.html"
+    },
+    "permissions": [
+        "sidePanel", 
+        "activeTab",
+        "tabs",
+        "scripting"
+    ],
+    "host_permissions": [
+        "*://*.twitter.com/*",
+        "*://*.x.com/*"
+    ]
+}
