@@ -14,6 +14,7 @@ const backBtn = document.getElementById('backBtn');
 const selectedTweetDisplay = document.getElementById('selectedTweetDisplay');
 const processingResult = document.getElementById('processingResult');
 const resultContent = document.getElementById('resultContent');
+const generateResponseBtn = document.getElementById('generateResponseBtn');
 
 // Function to update the status message
 function updateStatus(message) {
@@ -135,14 +136,8 @@ function showProcessingScreen() {
     // Hide any previous results
     processingResult.style.display = 'none';
     
-    // Add event listeners to processing option buttons
-    const optionButtons = processingScreen.querySelectorAll('.option-btn');
-    optionButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const option = button.getAttribute('data-option');
-            processTweet(option);
-        });
-    });
+    // Add event listener to generate response button
+    generateResponseBtn.addEventListener('click', generateChatGPTResponse);
 }
 
 // Function to hide processing screen
@@ -158,58 +153,96 @@ function hideProcessingScreen() {
     updateSelectionStatus();
 }
 
-// Function to process tweet with selected option
-function processTweet(option) {
+// Function to generate ChatGPT response
+async function generateChatGPTResponse() {
     const selectedTweet = currentTweets[selectedTweetIndex];
     
     // Show loading state
-    resultContent.innerHTML = '<div class="loading">Processing tweet...</div>';
+    resultContent.innerHTML = '<div class="loading">Generating AI response...</div>';
     processingResult.style.display = 'block';
     
-    // Simulate processing (replace with actual API calls later)
-    setTimeout(() => {
-        let result = '';
+    try {
+        // Prepare the prompt for ChatGPT
+        const prompt = `Generate a thoughtful, engaging response to this tweet. The response should be:
+        - Relevant and contextual to the original tweet
+        - Engaging and conversational in tone
+        - Appropriate for social media (under 280 characters if possible)
+        - Professional yet friendly
         
-        switch (option) {
-            case 'analyze':
-                result = `Sentiment Analysis for @${selectedTweet.username}'s tweet:<br><br>
-                <strong>Overall Sentiment:</strong> Positive 😊<br>
-                <strong>Confidence:</strong> 85%<br>
-                <strong>Key Emotions:</strong> Joy, Excitement<br>
-                <strong>Analysis:</strong> This tweet expresses positive emotions with enthusiastic language and exclamation marks.`;
-                break;
-                
-            case 'summarize':
-                result = `Summary of @${selectedTweet.username}'s tweet:<br><br>
-                <strong>Main Point:</strong> ${selectedTweet.text.substring(0, 100)}${selectedTweet.text.length > 100 ? '...' : ''}<br>
-                <strong>Key Topics:</strong> Social media, engagement<br>
-                <strong>Length:</strong> ${selectedTweet.text.length} characters<br>
-                <strong>Engagement:</strong> ${selectedTweet.likes} likes, ${selectedTweet.retweets} retweets`;
-                break;
-                
-            case 'translate':
-                result = `Translation of @${selectedTweet.username}'s tweet:<br><br>
-                <strong>Original:</strong> ${escapeHtml(selectedTweet.text)}<br><br>
-                <strong>Spanish:</strong> ${escapeHtml(selectedTweet.text)} (simulated translation)<br>
-                <strong>French:</strong> ${escapeHtml(selectedTweet.text)} (simulated translation)<br>
-                <strong>German:</strong> ${escapeHtml(selectedTweet.text)} (simulated translation)`;
-                break;
-                
-            case 'fact-check':
-                result = `Fact Check for @${selectedTweet.username}'s tweet:<br><br>
-                <strong>Claim:</strong> ${escapeHtml(selectedTweet.text)}<br>
-                <strong>Verification Status:</strong> 🔍 Under Review<br>
-                <strong>Reliability Score:</strong> 7/10<br>
-                <strong>Sources:</strong> Multiple fact-checking databases consulted<br>
-                <strong>Note:</strong> This is a simulated fact-check result.`;
-                break;
-                
-            default:
-                result = 'Unknown processing option selected.';
-        }
+        Original tweet by @${selectedTweet.username}: "${selectedTweet.text}"
         
-        resultContent.innerHTML = result;
-    }, 2000); // Simulate 2-second processing time
+        Please provide just the response text without any additional formatting or explanations.`;
+        
+        // For now, we'll simulate the API call
+        // In a real implementation, you would call the ChatGPT API here
+        const response = await simulateChatGPTCall(prompt);
+        
+        // Display the result
+        resultContent.innerHTML = `
+            <div class="response-container">
+                <h4>🤖 AI Generated Response:</h4>
+                <div class="response-text">${escapeHtml(response)}</div>
+                <div class="response-actions">
+                    <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(response).replace(/'/g, "\\'")}')">
+                        📋 Copy Response
+                    </button>
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Error generating response:', error);
+        resultContent.innerHTML = `
+            <div class="error">
+                <strong>Error:</strong> Failed to generate response. Please try again.
+                <br><br>
+                <small>Error details: ${error.message}</small>
+            </div>
+        `;
+    }
+}
+
+// Simulate ChatGPT API call (replace with actual API call)
+async function simulateChatGPTCall(prompt) {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    // Generate a contextual response based on the tweet content
+    const tweetText = prompt.match(/Original tweet by @\w+: "(.*?)"/)?.[1] || '';
+    
+    // Simple response generation logic (replace with actual ChatGPT API)
+    const responses = [
+        "That's an interesting perspective! Thanks for sharing this thought. 🤔",
+        "I can see where you're coming from with this. It's definitely something worth discussing! 💭",
+        "This is a great point! It really makes you think about the bigger picture. 👏",
+        "Thanks for bringing this up! It's an important conversation to have. 🙏",
+        "I appreciate you sharing this insight. It adds valuable context to the discussion! ✨",
+        "This is such a thoughtful observation. It really resonates with me! 💯",
+        "You've made an excellent point here. It's definitely food for thought! 🧠",
+        "I love how you've framed this! It's a fresh perspective on the topic. 🌟"
+    ];
+    
+    // Return a random response (in real implementation, this would be the ChatGPT response)
+    return responses[Math.floor(Math.random() * responses.length)];
+}
+
+// Function to copy text to clipboard
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Show success feedback
+        const copyBtn = document.querySelector('.copy-btn');
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = '✅ Copied!';
+        copyBtn.style.background = '#17bf63';
+        
+        setTimeout(() => {
+            copyBtn.textContent = originalText;
+            copyBtn.style.background = '';
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        alert('Failed to copy to clipboard');
+    });
 }
 
 // Function to display tweets
