@@ -1,10 +1,13 @@
 // Side panel script for displaying tweets
 let currentTweets = [];
+let selectedTweetIndex = -1;
 
 // DOM elements
 const statusElement = document.getElementById('status');
 const tweetsContainer = document.getElementById('tweetsContainer');
 const refreshBtn = document.getElementById('refreshBtn');
+const selectionStatusElement = document.getElementById('selectionStatus');
+const selectedTweetInfoElement = document.getElementById('selectedTweetInfo');
 
 // Function to update the status message
 function updateStatus(message) {
@@ -31,9 +34,9 @@ function formatTimestamp(timestamp) {
 }
 
 // Function to create tweet HTML
-function createTweetHTML(tweet) {
+function createTweetHTML(tweet, index) {
     return `
-        <div class="tweet-container">
+        <div class="tweet-container" data-tweet-index="${index}">
             <div class="tweet-header">
                 <span class="username">@${tweet.username}</span>
                 <span class="timestamp">${formatTimestamp(tweet.timestamp)}</span>
@@ -61,19 +64,57 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Function to handle tweet click
+function handleTweetClick(event) {
+    const tweetContainer = event.currentTarget;
+    const tweetIndex = parseInt(tweetContainer.getAttribute('data-tweet-index'));
+    
+    // Remove selection from all tweets
+    const allTweets = tweetsContainer.querySelectorAll('.tweet-container');
+    allTweets.forEach(tweet => tweet.classList.remove('selected'));
+    
+    // Add selection to clicked tweet
+    tweetContainer.classList.add('selected');
+    selectedTweetIndex = tweetIndex;
+    
+    console.log('Selected tweet:', currentTweets[tweetIndex]);
+    updateSelectionStatus();
+}
+
+// Function to update selection status display
+function updateSelectionStatus() {
+    if (selectedTweetIndex >= 0 && currentTweets[selectedTweetIndex]) {
+        const selectedTweet = currentTweets[selectedTweetIndex];
+        selectedTweetInfoElement.textContent = `@${selectedTweet.username} - ${selectedTweet.text.substring(0, 50)}${selectedTweet.text.length > 50 ? '...' : ''}`;
+        selectionStatusElement.style.display = 'block';
+    } else {
+        selectionStatusElement.style.display = 'none';
+    }
+}
+
 // Function to display tweets
 function displayTweets(tweets) {
     currentTweets = tweets;
+    selectedTweetIndex = -1; // Reset selection when tweets change
     
     if (!tweets || tweets.length === 0) {
         tweetsContainer.innerHTML = '<div class="no-tweets">No tweets found on this page</div>';
         updateStatus('No tweets found');
+        updateSelectionStatus();
         return;
     }
     
-    const tweetsHTML = tweets.map(tweet => createTweetHTML(tweet)).join('');
+    const tweetsHTML = tweets.map((tweet, index) => createTweetHTML(tweet, index)).join('');
     tweetsContainer.innerHTML = tweetsHTML;
     updateStatus(`Found ${tweets.length} tweet${tweets.length > 1 ? 's' : ''}`);
+    
+    // Add click event listeners to all tweet containers
+    const tweetContainers = tweetsContainer.querySelectorAll('.tweet-container');
+    tweetContainers.forEach(container => {
+        container.addEventListener('click', handleTweetClick);
+    });
+    
+    updateSelectionStatus();
 }
 
 // Function to request tweets from the active tab
@@ -139,6 +180,17 @@ refreshBtn.addEventListener('click', requestTweets);
 
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener(handleMessage);
+
+// Add keyboard event listener for deselecting (Escape key)
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && selectedTweetIndex >= 0) {
+        // Remove selection from all tweets
+        const allTweets = tweetsContainer.querySelectorAll('.tweet-container');
+        allTweets.forEach(tweet => tweet.classList.remove('selected'));
+        selectedTweetIndex = -1;
+        updateSelectionStatus();
+    }
+});
 
 // Initialize when the side panel loads
 document.addEventListener('DOMContentLoaded', () => {
