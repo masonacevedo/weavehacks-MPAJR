@@ -1,1 +1,6 @@
 weaveheacks_env/
+*.pyc
+__pycache__/
+postgresql/
+.env
+xtoken
