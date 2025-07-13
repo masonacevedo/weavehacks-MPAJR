@@ -1,6 +1,7 @@
 // Side panel script for displaying tweets
 let currentTweets = [];
 let selectedTweetIndex = -1;
+let isGeneratingResponse = false; // Flag to prevent multiple simultaneous requests
 
 // DOM elements
 const statusElement = document.getElementById('status');
@@ -145,9 +146,6 @@ function showProcessingScreen() {
     
     // Hide any previous results
     processingResult.style.display = 'none';
-    
-    // Add event listener to generate response button
-    generateResponseBtn.addEventListener('click', generateChatGPTResponse);
 }
 
 // Function to hide processing screen
@@ -165,7 +163,45 @@ function hideProcessingScreen() {
 
 // Function to generate AI response using Flask server
 async function generateChatGPTResponse() {
+    // Prevent multiple simultaneous requests
+    if (isGeneratingResponse) {
+        console.log('Already generating response, ignoring request');
+        return;
+    }
+    
+    console.log('generateChatGPTResponse called');
+    console.log('selectedTweetIndex:', selectedTweetIndex);
+    console.log('currentTweets length:', currentTweets.length);
+    console.log('currentTweets:', currentTweets);
+    
+    // Validate that we have a selected tweet
+    if (selectedTweetIndex < 0 || selectedTweetIndex >= currentTweets.length) {
+        console.error('Invalid selectedTweetIndex:', selectedTweetIndex);
+        resultContent.innerHTML = `
+            <div class="error">
+                <strong>Error:</strong> No tweet selected. Please select a tweet first.
+            </div>
+        `;
+        processingResult.style.display = 'block';
+        return;
+    }
+    
     const selectedTweet = currentTweets[selectedTweetIndex];
+    console.log('Selected tweet:', selectedTweet);
+    
+    // Additional validation to ensure the tweet object is valid
+    if (!selectedTweet || !selectedTweet.text || !selectedTweet.username) {
+        resultContent.innerHTML = `
+            <div class="error">
+                <strong>Error:</strong> Invalid tweet data. Please refresh and try again.
+            </div>
+        `;
+        processingResult.style.display = 'block';
+        return;
+    }
+    
+    // Set flag to prevent multiple requests
+    isGeneratingResponse = true;
     
     // Show loading state
     resultContent.innerHTML = '<div class="loading">Generating AI response...</div>';
@@ -199,6 +235,9 @@ async function generateChatGPTResponse() {
                 <small>Make sure the Flask server is running on port 5001</small>
             </div>
         `;
+    } finally {
+        // Reset flag when done
+        isGeneratingResponse = false;
     }
 }
 
@@ -224,6 +263,19 @@ function updateSliderDisplay() {
 
 // Call Flask server to get AI response
 async function callFlaskServer(tweet) {
+    // Additional validation for the tweet parameter
+    if (!tweet || typeof tweet !== 'object') {
+        throw new Error('Invalid tweet object provided');
+    }
+    
+    if (!tweet.text || typeof tweet.text !== 'string') {
+        throw new Error('Tweet text is missing or invalid');
+    }
+    
+    if (!tweet.username || typeof tweet.username !== 'string') {
+        throw new Error('Tweet username is missing or invalid');
+    }
+    
     const serverUrl = 'http://localhost:5001/analyze_tweet';
     
     const sliderValues = getSliderValues();
@@ -285,19 +337,39 @@ function copyToClipboard(text) {
 
 // Function to display tweets
 function displayTweets(tweets) {
-    currentTweets = tweets;
+    console.log('displayTweets called with:', tweets);
+    
+    // Filter out invalid tweets
+    const validTweets = tweets ? tweets.filter(tweet => {
+        const isValid = tweet && 
+            typeof tweet === 'object' && 
+            tweet.text && 
+            typeof tweet.text === 'string' && 
+            tweet.username && 
+            typeof tweet.username === 'string';
+        
+        if (!isValid) {
+            console.warn('Invalid tweet found:', tweet);
+        }
+        
+        return isValid;
+    }) : [];
+    
+    console.log('Valid tweets:', validTweets.length, 'out of', tweets ? tweets.length : 0);
+    
+    currentTweets = validTweets;
     selectedTweetIndex = -1; // Reset selection when tweets change
     
-    if (!tweets || tweets.length === 0) {
-        tweetsContainer.innerHTML = '<div class="no-tweets">No tweets found on this page</div>';
-        updateStatus('No tweets found');
+    if (!validTweets || validTweets.length === 0) {
+        tweetsContainer.innerHTML = '<div class="no-tweets">No valid tweets found on this page</div>';
+        updateStatus('No valid tweets found');
         updateSelectionStatus();
         return;
     }
     
-    const tweetsHTML = tweets.map((tweet, index) => createTweetHTML(tweet, index)).join('');
+    const tweetsHTML = validTweets.map((tweet, index) => createTweetHTML(tweet, index)).join('');
     tweetsContainer.innerHTML = tweetsHTML;
-    updateStatus(`Found ${tweets.length} tweet${tweets.length > 1 ? 's' : ''}`);
+    updateStatus(`Found ${validTweets.length} valid tweet${validTweets.length > 1 ? 's' : ''}`);
     
     // Add click event listeners to all tweet containers
     const tweetContainers = tweetsContainer.querySelectorAll('.tweet-container');
@@ -370,6 +442,7 @@ function handleMessage(message) {
 refreshBtn.addEventListener('click', requestTweets);
 processBtn.addEventListener('click', showProcessingScreen);
 backBtn.addEventListener('click', hideProcessingScreen);
+generateResponseBtn.addEventListener('click', generateChatGPTResponse);
 
 // Slider event listeners
 toneSlider.addEventListener('input', updateSliderDisplay);
