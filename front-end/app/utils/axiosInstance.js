@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const configForRequest = { baseURL: '/' };
-const configForLocalhostRequest = { baseURL: 'http://localhost:8080'}
+const configForRequest = { baseURL: 'http://localhost:5001' };
+const configForLocalhostRequest = { baseURL: 'http://localhost:5001'}
 
 export const axiosInstance = axios.create(configForRequest);
 export const localhostInstance = axios.create(configForLocalhostRequest);

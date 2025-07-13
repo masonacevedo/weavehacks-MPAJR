@@ -218,6 +218,10 @@
   transition: all 0.3s ease;
 }
 
+.sendButton {
+  background: #1da1f2;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .mainContent {

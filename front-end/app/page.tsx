@@ -3,7 +3,12 @@
 import styles from "./page.module.css";
 import Link from "next/link";
 
+import {analyzeTweet} from "./redux/tweetsSlice";
+import {useState} from "react";
+import {useDispatch} from "react-redux";
+
 export default function PostsOpener() {
+  const dispatch = useDispatch();
 
   const messages = [
     {text: "Welcome to Barracuda474!", type: "user"},
@@ -12,6 +17,15 @@ export default function PostsOpener() {
     {text: "Explore the features available.", type: "user"},
     {text: "Stay updated with the latest news.", type: "user"},
   ]
+
+  const [query, setQuery] = useState("");
+
+  function submitQueryHandler(e) {
+    e?.preventDefault()
+    console.log("Submitting query:", query);
+    dispatch(analyzeTweet({ text: query }));
+  }
+
 
   return (
     <div className={styles.page}>
@@ -64,11 +78,19 @@ export default function PostsOpener() {
               }
             </div>
 
-            <div styles={{ height: '500px' }}></div>
+            <div styles={{height: '500px'}}></div>
 
             {/* Input Area */}
             <div className={styles.message}>
-              <input name={"query"} styles={{'border': 'none'}} placeholder="Type your query here"/>
+              <input
+                name="query"
+                style={{border: "none", "width": "100%"}}
+                placeholder="Type your query here"
+                onChange={(e) => setQuery(e.target.value)}
+              />
+              <button className={styles.sendButton} onClick={submitQueryHandler}>
+                Send
+              </button>
             </div>
           </div>
         </div>

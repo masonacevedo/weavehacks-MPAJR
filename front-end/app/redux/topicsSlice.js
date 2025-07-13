@@ -21,7 +21,7 @@ export const addTopic = createAsyncThunk('addTopic', async ({name}) => {
 })
 
 export const topicsSlice = createSlice({
-   name: 'contents',
+   name: 'topics',
    initialState: {
       loading: false,
       results: [],

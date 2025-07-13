@@ -1,7 +1,7 @@
-export const fetchRequest = (methodType, requestType, payload) => {
+export const fetchRequest = (methodType, url, payload) => {
   return {
     method: methodType,
-    url: `${requestType}`,
+    url: `${url}`,
     data: payload,
   };
 };
