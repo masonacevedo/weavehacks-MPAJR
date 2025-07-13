@@ -1,8 +1,18 @@
+"use client"
+
 import styles from "./page.module.css";
 
 export default function SignUp() {
+  const handleLogin = () => {
+    // Add login logic here
+  };
+
+  const handleSignup = () => {
+    // Add signup logic here
+  };
+
   return (
-    <div>
+    <div className={styles.page}>
       <div className="container">
         <div className="logo"></div>
 
@@ -30,9 +40,8 @@ export default function SignUp() {
           </div>
 
           <div className="button-group">
-            <button type="button" className="btn btn-login" onClick="handleLogin()">LOG IN</button>
-            <button type="button" className="btn btn-signup" onClick="handleSignup()">SIGN UP
-            </button>
+            <button type="button" className="btn btn-login" onClick={handleLogin}>LOG IN</button>
+            <button type="button" className="btn btn-signup" onClick={handleSignup}>SIGN UP</button>
           </div>
         </div>
       </div>

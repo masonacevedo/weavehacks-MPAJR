@@ -1,8 +1,10 @@
+"use client"
+
 import styles from "./page.module.css";
 
 export default function Loading() {
   return (
-    <div>
+    <div className={styles.page}>
       <div className="container">
         <div className="logo-container"></div>
       </div>

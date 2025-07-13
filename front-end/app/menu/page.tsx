@@ -1,8 +1,10 @@
+"use client"
+
 import styles from "./page.module.css";
 
 export default function Menu() {
   return (
-    <div>
+    <div className={styles.page}>
       <div className="app-container">
         <div className="main-menu" id="mainMenu">
           <div className="logo-container">
@@ -10,19 +12,19 @@ export default function Menu() {
           </div>
 
           <div className="navigation">
-            <div className="nav-item" onClick="showContent('account')">
+            <div className="nav-item" onClick={() => showContent('account')}>
               ACCOUNT
             </div>
-            <div className="nav-item" onClick="showContent('posts')">
+            <div className="nav-item" onClick={() => showContent('posts')}>
               POSTS
             </div>
-            <div className="nav-item" onClick="showContent('contact')">
+            <div className="nav-item" onClick={() => showContent('contact')}>
               CONTACT US
             </div>
           </div>
         </div>
 
-        <!-- Content Areas -->
+        {/* Content Areas */}
         <div className="content-area" id="accountContent">
           <h2>Account Management</h2>
           <p>Welcome to your Lodge account portal. Here you can manage your membership details, view
@@ -35,15 +37,21 @@ export default function Menu() {
           <p>• Continuing education opportunities</p>
 
           <div
-            style="margin-top: 30px; padding: 20px; background: rgba(137, 100, 0, 0.1); border-radius: 15px;">
-            <h3 style="color: #896400; margin-bottom: 10px;">Member Services</h3>
+            style={{
+              marginTop: "30px",
+              padding: "20px",
+              background: "rgba(137, 100, 0, 0.1)",
+              borderRadius: "15px"
+            }}
+          >
+            <h3 style={{ color: "#896400", marginBottom: "10px" }}>Member Services</h3>
             <p>• Update Contact Information</p>
             <p>• View Payment History</p>
             <p>• Download Certificates</p>
             <p>• Schedule Appointments</p>
           </div>
 
-          <button className="back-btn" onClick="showMainMenu()">Back to Main Menu</button>
+          <button className="back-btn" onClick={() => showMainMenu()}>Back to Main Menu</button>
         </div>
 
         <div className="content-area" id="postsContent">
@@ -52,8 +60,15 @@ export default function Menu() {
             community.</p>
 
           <div
-            style="margin-top: 30px; padding: 20px; background: rgba(137, 100, 0, 0.1); border-radius: 15px; margin-bottom: 20px;">
-            <h3 style="color: #896400; margin-bottom: 10px;">Recent Announcements</h3>
+            style={{
+              marginTop: "30px",
+              padding: "20px",
+              background: "rgba(137, 100, 0, 0.1)",
+              borderRadius: "15px",
+              marginBottom: "20px"
+            }}
+          >
+            <h3 style={{ color: "#896400", marginBottom: "10px" }}>Recent Announcements</h3>
             <p><strong>Monthly Meeting:</strong> Join us for our regular monthly meeting on the
               first Thursday of each month at 7:00 PM.</p>
             <p><strong>Community Service:</strong> Upcoming charity drive to support local families
@@ -63,15 +78,21 @@ export default function Menu() {
           </div>
 
           <div
-            style="margin-top: 20px; padding: 20px; background: rgba(137, 100, 0, 0.1); border-radius: 15px;">
-            <h3 style="color: #896400; margin-bottom: 10px;">Upcoming Events</h3>
+            style={{
+              marginTop: "20px",
+              padding: "20px",
+              background: "rgba(137, 100, 0, 0.1)",
+              borderRadius: "15px"
+            }}
+          >
+            <h3 style={{ color: "#896400", marginBottom: "10px" }}>Upcoming Events</h3>
             <p>• Lodge Installation Ceremony - December 15th</p>
             <p>• Annual Charity Gala - January 20th</p>
             <p>• Brothers' Night Out - February 10th</p>
             <p>• Spring Degree Work - March 5th</p>
           </div>
 
-          <button className="back-btn" onClick="showMainMenu()">Back to Main Menu</button>
+          <button className="back-btn" onClick={() => showMainMenu()}>Back to Main Menu</button>
         </div>
 
         <div className="content-area" id="contactContent">
@@ -80,10 +101,17 @@ export default function Menu() {
             questions or concerns you may have.</p>
 
           <div
-            style="margin-top: 30px; padding: 20px; background: rgba(137, 100, 0, 0.1); border-radius: 15px; margin-bottom: 20px;">
-            <h3 style="color: #896400; margin-bottom: 10px;">Lodge Information</h3>
-            <p><strong>Lodge Address:</strong><br/>
-              123 Masonic Way<br/>
+            style={{
+              marginTop: "30px",
+              padding: "20px",
+              background: "rgba(137, 100, 0, 0.1)",
+              borderRadius: "15px",
+              marginBottom: "20px"
+            }}
+          >
+            <h3 style={{ color: "#896400", marginBottom: "10px" }}>Lodge Information</h3>
+            <p><strong>Lodge Address:</strong><br />
+              123 Masonic Way<br />
               Your City, State 12345</p>
             <p><strong>Phone:</strong> (555) 123-4567</p>
             <p><strong>Email:</strong> info@yourlodge.org</p>
@@ -91,8 +119,14 @@ export default function Menu() {
           </div>
 
           <div
-            style="margin-top: 20px; padding: 20px; background: rgba(137, 100, 0, 0.1); border-radius: 15px;">
-            <h3 style="color: #896400; margin-bottom: 10px;">Lodge Officers</h3>
+            style={{
+              marginTop: "20px",
+              padding: "20px",
+              background: "rgba(137, 100, 0, 0.1)",
+              borderRadius: "15px"
+            }}
+          >
+            <h3 style={{ color: "#896400", marginBottom: "10px" }}>Lodge Officers</h3>
             <p><strong>Worshipful Master:</strong> Brother John Smith</p>
             <p><strong>Senior Warden:</strong> Brother Mike Johnson</p>
             <p><strong>Junior Warden:</strong> Brother David Brown</p>
@@ -101,14 +135,20 @@ export default function Menu() {
           </div>
 
           <div
-            style="margin-top: 20px; padding: 20px; background: rgba(137, 100, 0, 0.1); border-radius: 15px;">
-            <h3 style="color: #896400; margin-bottom: 10px;">Quick Contact Form</h3>
+            style={{
+              marginTop: "20px",
+              padding: "20px",
+              background: "rgba(137, 100, 0, 0.1)",
+              borderRadius: "15px"
+            }}
+          >
+            <h3 style={{ color: "#896400", marginBottom: "10px" }}>Quick Contact Form</h3>
             <p>For immediate assistance, please call our Lodge phone number during business hours
               (Monday-Friday, 9 AM - 5 PM) or send us an email. We typically respond to all
               inquiries within 24 hours.</p>
           </div>
 
-          <button className="back-btn" onClick="showMainMenu()">Back to Main Menu</button>
+          <button className="back-btn" onClick={() => showMainMenu()}>Back to Main Menu</button>
         </div>
       </div>
     </div>
