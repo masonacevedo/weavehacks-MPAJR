@@ -1,6 +1,12 @@
 // Side panel script for displaying tweets
 let currentTweets = [];
 let selectedTweetIndex = -1;
+let isGeneratingResponse = false; // Flag to prevent multiple simultaneous requests
+
+// Chat conversation state
+let conversationHistory = [];
+let currentResponse = '';
+let isSendingMessage = false;
 
 // DOM elements
 const statusElement = document.getElementById('status');
@@ -15,6 +21,30 @@ const selectedTweetDisplay = document.getElementById('selectedTweetDisplay');
 const processingResult = document.getElementById('processingResult');
 const resultContent = document.getElementById('resultContent');
 const generateResponseBtn = document.getElementById('generateResponseBtn');
+
+// Chat interface elements
+const chatInterface = document.getElementById('chatInterface');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+// Debug chat interface elements
+console.log('Chat interface elements found:', {
+    chatInterface: !!chatInterface,
+    chatMessages: !!chatMessages,
+    chatInput: !!chatInput,
+    sendMessageBtn: !!sendMessageBtn
+});
+
+// Slider elements
+const toneSlider = document.getElementById('toneSlider');
+const toneValue = document.getElementById('toneValue');
+const styleSlider = document.getElementById('styleSlider');
+const styleValue = document.getElementById('styleValue');
+
+// Slider value mappings
+const toneOptions = ['Casual', 'Neutral', 'Professional'];
+const styleOptions = ['Problem-solving', 'Engaging', 'Opposing'];
 
 // Function to update the status message
 function updateStatus(message) {
@@ -135,9 +165,6 @@ function showProcessingScreen() {
     
     // Hide any previous results
     processingResult.style.display = 'none';
-    
-    // Add event listener to generate response button
-    generateResponseBtn.addEventListener('click', generateChatGPTResponse);
 }
 
 // Function to hide processing screen
@@ -149,33 +176,65 @@ function hideProcessingScreen() {
     tweetsContainer.style.display = 'block';
     processingScreen.style.display = 'none';
     
+    // Hide chat interface
+    hideChatInterface();
+    
     // Update selection status if there's still a selected tweet
     updateSelectionStatus();
 }
 
-// Function to generate ChatGPT response
+// Function to generate AI response using Flask server
 async function generateChatGPTResponse() {
+    // Prevent multiple simultaneous requests
+    if (isGeneratingResponse) {
+        console.log('Already generating response, ignoring request');
+        return;
+    }
+    
+    console.log('generateChatGPTResponse called');
+    console.log('selectedTweetIndex:', selectedTweetIndex);
+    console.log('currentTweets length:', currentTweets.length);
+    console.log('currentTweets:', currentTweets);
+    
+    // Validate that we have a selected tweet
+    if (selectedTweetIndex < 0 || selectedTweetIndex >= currentTweets.length) {
+        console.error('Invalid selectedTweetIndex:', selectedTweetIndex);
+        resultContent.innerHTML = `
+            <div class="error">
+                <strong>Error:</strong> No tweet selected. Please select a tweet first.
+            </div>
+        `;
+        processingResult.style.display = 'block';
+        return;
+    }
+    
     const selectedTweet = currentTweets[selectedTweetIndex];
+    console.log('Selected tweet:', selectedTweet);
+    
+    // Additional validation to ensure the tweet object is valid
+    if (!selectedTweet || !selectedTweet.text || !selectedTweet.username) {
+        resultContent.innerHTML = `
+            <div class="error">
+                <strong>Error:</strong> Invalid tweet data. Please refresh and try again.
+            </div>
+        `;
+        processingResult.style.display = 'block';
+        return;
+    }
+    
+    // Set flag to prevent multiple requests
+    isGeneratingResponse = true;
     
     // Show loading state
     resultContent.innerHTML = '<div class="loading">Generating AI response...</div>';
     processingResult.style.display = 'block';
     
     try {
-        // Prepare the prompt for ChatGPT
-        const prompt = `Generate a thoughtful, engaging response to this tweet. The response should be:
-        - Relevant and contextual to the original tweet
-        - Engaging and conversational in tone
-        - Appropriate for social media (under 280 characters if possible)
-        - Professional yet friendly
+        // Call the Flask server
+        const response = await callFlaskServer(selectedTweet);
         
-        Original tweet by @${selectedTweet.username}: "${selectedTweet.text}"
-        
-        Please provide just the response text without any additional formatting or explanations.`;
-        
-        // For now, we'll simulate the API call
-        // In a real implementation, you would call the ChatGPT API here
-        const response = await simulateChatGPTCall(prompt);
+        // Store the current response
+        currentResponse = response;
         
         // Display the result
         resultContent.innerHTML = `
@@ -183,12 +242,25 @@ async function generateChatGPTResponse() {
                 <h4>🤖 AI Generated Response:</h4>
                 <div class="response-text">${escapeHtml(response)}</div>
                 <div class="response-actions">
-                    <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(response).replace(/'/g, "\\'")}')">
+                    <button class="copy-btn" data-response-text="${escapeHtml(response).replace(/"/g, '&quot;')}">
                         📋 Copy Response
+                    </button>
+                    <button class="refine-response-btn">
+                        💬 Refine Response
                     </button>
                 </div>
             </div>
         `;
+        
+        // Add event listeners to the new buttons
+        const copyBtn = resultContent.querySelector('.copy-btn');
+        const refineBtn = resultContent.querySelector('.refine-response-btn');
+        
+        copyBtn.addEventListener('click', () => {
+            copyToClipboard(copyBtn.getAttribute('data-response-text'));
+        });
+        
+        refineBtn.addEventListener('click', showChatInterface);
         
     } catch (error) {
         console.error('Error generating response:', error);
@@ -197,33 +269,138 @@ async function generateChatGPTResponse() {
                 <strong>Error:</strong> Failed to generate response. Please try again.
                 <br><br>
                 <small>Error details: ${error.message}</small>
+                <br><br>
+                <small>Make sure the Flask server is running on port 5001</small>
             </div>
         `;
+    } finally {
+        // Reset flag when done
+        isGeneratingResponse = false;
     }
 }
 
-// Simulate ChatGPT API call (replace with actual API call)
-async function simulateChatGPTCall(prompt) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+// Function to get current slider values
+function getSliderValues() {
+    const toneIndex = parseInt(toneSlider.value);
+    const styleIndex = parseInt(styleSlider.value);
     
-    // Generate a contextual response based on the tweet content
-    const tweetText = prompt.match(/Original tweet by @\w+: "(.*?)"/)?.[1] || '';
+    return {
+        tone: toneOptions[toneIndex],
+        style: styleOptions[styleIndex]
+    };
+}
+
+// Function to update slider display values
+function updateSliderDisplay() {
+    const toneIndex = parseInt(toneSlider.value);
+    const styleIndex = parseInt(styleSlider.value);
     
-    // Simple response generation logic (replace with actual ChatGPT API)
-    const responses = [
-        "That's an interesting perspective! Thanks for sharing this thought. 🤔",
-        "I can see where you're coming from with this. It's definitely something worth discussing! 💭",
-        "This is a great point! It really makes you think about the bigger picture. 👏",
-        "Thanks for bringing this up! It's an important conversation to have. 🙏",
-        "I appreciate you sharing this insight. It adds valuable context to the discussion! ✨",
-        "This is such a thoughtful observation. It really resonates with me! 💯",
-        "You've made an excellent point here. It's definitely food for thought! 🧠",
-        "I love how you've framed this! It's a fresh perspective on the topic. 🌟"
-    ];
+    toneValue.textContent = toneOptions[toneIndex];
+    styleValue.textContent = styleOptions[styleIndex];
+}
+
+// Call Flask server to get AI response
+async function callFlaskServer(tweet) {
+    // Additional validation for the tweet parameter
+    if (!tweet || typeof tweet !== 'object') {
+        throw new Error('Invalid tweet object provided');
+    }
     
-    // Return a random response (in real implementation, this would be the ChatGPT response)
-    return responses[Math.floor(Math.random() * responses.length)];
+    if (!tweet.text || typeof tweet.text !== 'string') {
+        throw new Error('Tweet text is missing or invalid');
+    }
+    
+    if (!tweet.username || typeof tweet.username !== 'string') {
+        throw new Error('Tweet username is missing or invalid');
+    }
+    
+    const serverUrl = 'http://localhost:5001/analyze_tweet';
+    
+    const sliderValues = getSliderValues();
+    
+    const requestData = {
+        tweet_text: tweet.text,
+        username: tweet.username,
+        tone: sliderValues.tone,
+        style: sliderValues.style
+    };
+    
+    console.log('Calling Flask server with data:', requestData);
+    
+    const response = await fetch(serverUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+        throw new Error(data.error);
+    }
+    
+    if (!data.response) {
+        throw new Error('No response received from server');
+    }
+    
+    console.log('Received response from Flask server:', data.response);
+    return data.response;
+}
+
+// Call Flask server to get refined response
+async function callFlaskServerForRefinement(userMessage) {
+    if (selectedTweetIndex < 0 || selectedTweetIndex >= currentTweets.length) {
+        throw new Error('No tweet selected for refinement');
+    }
+    
+    const selectedTweet = currentTweets[selectedTweetIndex];
+    const serverUrl = 'http://localhost:5001/refine_response';
+    const sliderValues = getSliderValues();
+    
+    const requestData = {
+        tweet_text: selectedTweet.text,
+        username: selectedTweet.username,
+        current_response: currentResponse,
+        user_feedback: userMessage,
+        tone: sliderValues.tone,
+        style: sliderValues.style,
+        conversation_history: conversationHistory
+    };
+    
+    console.log('Calling Flask server for refinement with data:', requestData);
+    
+    const response = await fetch(serverUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+        throw new Error(data.error);
+    }
+    
+    if (!data.response) {
+        throw new Error('No refined response received from server');
+    }
+    
+    console.log('Received refined response from Flask server:', data.response);
+    return data.response;
 }
 
 // Function to copy text to clipboard
@@ -245,21 +422,145 @@ function copyToClipboard(text) {
     });
 }
 
+// Function to add a message to the chat
+function addChatMessage(content, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
+    
+    const header = document.createElement('div');
+    header.className = 'chat-message-header';
+    header.textContent = isUser ? 'You' : 'AI Assistant';
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'chat-message-content';
+    messageContent.textContent = content;
+    
+    messageDiv.appendChild(header);
+    messageDiv.appendChild(messageContent);
+    
+    chatMessages.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Add to conversation history
+    conversationHistory.push({
+        role: isUser ? 'user' : 'assistant',
+        content: content
+    });
+}
+
+// Function to clear chat interface
+function clearChatInterface() {
+    chatMessages.innerHTML = '';
+    conversationHistory = [];
+    currentResponse = '';
+    chatInput.value = '';
+}
+
+// Function to show chat interface
+function showChatInterface() {
+    console.log('showChatInterface called');
+    console.log('chatInterface element:', chatInterface);
+    
+    if (!chatInterface) {
+        console.error('chatInterface element not found!');
+        return;
+    }
+    
+    chatInterface.style.display = 'block';
+    clearChatInterface();
+    
+    // Add initial AI message
+    addChatMessage('I\'ve generated a response for you. You can ask me to modify it in any way you\'d like!', false);
+    
+    console.log('Chat interface should now be visible');
+}
+
+// Function to hide chat interface
+function hideChatInterface() {
+    chatInterface.style.display = 'none';
+}
+
+// Function to send a message and get refined response
+async function sendMessage() {
+    if (isSendingMessage) return;
+    
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message to chat
+    addChatMessage(message, true);
+    chatInput.value = '';
+    
+    // Disable input while processing
+    isSendingMessage = true;
+    sendMessageBtn.disabled = true;
+    chatInput.disabled = true;
+    
+    try {
+        // Get refined response from Flask server
+        const refinedResponse = await callFlaskServerForRefinement(message);
+        
+        // Update the current response
+        currentResponse = refinedResponse;
+        
+        // Add AI response to chat
+        addChatMessage(refinedResponse, false);
+        
+        // Update the main response display
+        const responseTextElement = document.querySelector('.response-text');
+        if (responseTextElement) {
+            responseTextElement.textContent = refinedResponse;
+        }
+        
+    } catch (error) {
+        console.error('Error getting refined response:', error);
+        addChatMessage('Sorry, I encountered an error while refining the response. Please try again.', false);
+    } finally {
+        // Re-enable input
+        isSendingMessage = false;
+        sendMessageBtn.disabled = false;
+        chatInput.disabled = false;
+        chatInput.focus();
+    }
+}
+
 // Function to display tweets
 function displayTweets(tweets) {
-    currentTweets = tweets;
+    console.log('displayTweets called with:', tweets);
+    
+    // Filter out invalid tweets
+    const validTweets = tweets ? tweets.filter(tweet => {
+        const isValid = tweet && 
+            typeof tweet === 'object' && 
+            tweet.text && 
+            typeof tweet.text === 'string' && 
+            tweet.username && 
+            typeof tweet.username === 'string';
+        
+        if (!isValid) {
+            console.warn('Invalid tweet found:', tweet);
+        }
+        
+        return isValid;
+    }) : [];
+    
+    console.log('Valid tweets:', validTweets.length, 'out of', tweets ? tweets.length : 0);
+    
+    currentTweets = validTweets;
     selectedTweetIndex = -1; // Reset selection when tweets change
     
-    if (!tweets || tweets.length === 0) {
-        tweetsContainer.innerHTML = '<div class="no-tweets">No tweets found on this page</div>';
-        updateStatus('No tweets found');
+    if (!validTweets || validTweets.length === 0) {
+        tweetsContainer.innerHTML = '<div class="no-tweets">No valid tweets found on this page</div>';
+        updateStatus('No valid tweets found');
         updateSelectionStatus();
         return;
     }
     
-    const tweetsHTML = tweets.map((tweet, index) => createTweetHTML(tweet, index)).join('');
+    const tweetsHTML = validTweets.map((tweet, index) => createTweetHTML(tweet, index)).join('');
     tweetsContainer.innerHTML = tweetsHTML;
-    updateStatus(`Found ${tweets.length} tweet${tweets.length > 1 ? 's' : ''}`);
+    updateStatus(`Found ${validTweets.length} valid tweet${validTweets.length > 1 ? 's' : ''}`);
     
     // Add click event listeners to all tweet containers
     const tweetContainers = tweetsContainer.querySelectorAll('.tweet-container');
@@ -332,6 +633,23 @@ function handleMessage(message) {
 refreshBtn.addEventListener('click', requestTweets);
 processBtn.addEventListener('click', showProcessingScreen);
 backBtn.addEventListener('click', hideProcessingScreen);
+generateResponseBtn.addEventListener('click', generateChatGPTResponse);
+
+// Chat interface event listeners
+sendMessageBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+});
+
+// Slider event listeners
+toneSlider.addEventListener('input', updateSliderDisplay);
+styleSlider.addEventListener('input', updateSliderDisplay);
+
+// Initialize slider displays
+updateSliderDisplay();
 
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener(handleMessage);
