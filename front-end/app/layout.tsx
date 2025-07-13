@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WeaveHacks",
+  title: "Barracuda474",
 };
 
 export default function RootLayout({
