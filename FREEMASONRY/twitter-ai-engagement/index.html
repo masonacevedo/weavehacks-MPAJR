@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREEMASONRY - Twitter AI Engagement Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">⚜️</div>
+                    <h1>FREEMASONRY</h1>
+                </div>
+                <p class="logo-subtitle">AI Engagement Platform</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item active">
+                        <a href="#dashboard" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#twitter-scraper" class="nav-link">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter Scraper</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#ai-generator" class="nav-link">
+                            <i class="fas fa-robot"></i>
+                            <span>AI Generator</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#engagement" class="nav-link">
+                            <i class="fas fa-comments"></i>
+                            <span>Engagement</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#analytics" class="nav-link">
+                            <i class="fas fa-analytics"></i>
+                            <span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="https://via.placeholder.com/40x40/ffd700/1a1a2e?text=U" alt="User Avatar">
+                    </div>
+                    <div class="user-info">
+                        <h4>AI Manager</h4>
+                        <p>Active</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2 id="page-title">Dashboard</h2>
+                    <p id="page-subtitle">AI-Powered Twitter Engagement</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search topics, tweets..." class="search-input">
+                    </div>
+                    <div class="header-actions">
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">5</span>
+                        </button>
+                        <button class="profile-btn">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="dashboard-grid">
+                        <div class="card stats-card">
+                            <div class="card-header">
+                                <h3>Engagement Stats</h3>
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="stat-item">
+                                    <span class="stat-number" id="tweetsScraped">0</span>
+                                    <span class="stat-label">Tweets Scraped</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="aiResponses">0</span>
+                                    <span class="stat-label">AI Responses</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="engagementRate">0%</span>
+                                    <span class="stat-label">Engagement Rate</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card recent-activity">
+                            <div class="card-header">
+                                <h3>Recent Activity</h3>
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="card-content" id="activityFeed">
+                                <!-- Activity items will be loaded here -->
+                            </div>
+                        </div>
+
+                        <div class="card trending-topics">
+                            <div class="card-header">
+                                <h3>Trending Topics</h3>
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <div class="card-content" id="trendingTopics">
+                                <!-- Trending topics will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Twitter Scraper Section -->
+                <section id="twitter-scraper" class="content-section">
+                    <div class="scraper-container">
+                        <div class="scraper-header">
+                            <h3>Twitter Scraper</h3>
+                            <p>Search and scrape tweets based on specific topics</p>
+                        </div>
+                        
+                        <div class="scraper-controls">
+                            <div class="search-group">
+                                <label>Search Topic</label>
+                                <input type="text" id="searchTopic" placeholder="Enter topic to search (e.g., 'freemasonry', 'masonic lodge')" class="search-input-large">
+                            </div>
+                            
+                            <div class="filter-group">
+                                <div class="filter-item">
+                                    <label>Number of Tweets</label>
+                                    <select id="tweetCount">
+                                        <option value="10">10 tweets</option>
+                                        <option value="25" selected>25 tweets</option>
+                                        <option value="50">50 tweets</option>
+                                        <option value="100">100 tweets</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-item">
+                                    <label>Time Range</label>
+                                    <select id="timeRange">
+                                        <option value="1h">Last hour</option>
+                                        <option value="24h" selected>Last 24 hours</option>
+                                        <option value="7d">Last 7 days</option>
+                                        <option value="30d">Last 30 days</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="filter-item">
+                                    <label>Language</label>
+                                    <select id="language">
+                                        <option value="en" selected>English</option>
+                                        <option value="es">Spanish</option>
+                                        <option value="fr">French</option>
+                                        <option value="de">German</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" id="startScraping">
+                                <i class="fas fa-search"></i>
+                                Start Scraping
+                            </button>
+                        </div>
+                        
+                        <div class="scraping-results" id="scrapingResults">
+                            <div class="results-header">
+                                <h4>Scraped Tweets</h4>
+                                <div class="results-actions">
+                                    <button class="btn btn-secondary" id="exportResults">
+                                        <i class="fas fa-download"></i>
+                                        Export
+                                    </button>
+                                    <button class="btn btn-secondary" id="clearResults">
+                                        <i class="fas fa-trash"></i>
+                                        Clear
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="tweets-list" id="tweetsList">
+                                <!-- Scraped tweets will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- AI Generator Section -->
+                <section id="ai-generator" class="content-section">
+                    <div class="ai-container">
+                        <div class="ai-header">
+                            <h3>AI Response Generator</h3>
+                            <p>Generate contextual AI responses with product integration</p>
+                        </div>
+                        
+                        <div class="ai-controls">
+                            <div class="tone-selection">
+                                <label>Response Tone</label>
+                                <div class="tone-buttons">
+                                    <button class="tone-btn active" data-tone="professional">Professional</button>
+                                    <button class="tone-btn" data-tone="friendly">Friendly</button>
+                                    <button class="tone-btn" data-tone="casual">Casual</button>
+                                    <button class="tone-btn" data-tone="formal">Formal</button>
+                                    <button class="tone-btn" data-tone="enthusiastic">Enthusiastic</button>
+                                </div>
+                            </div>
+                            
+                            <div class="product-integration">
+                                <label>Product Integration</label>
+                                <div class="product-options">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="includeProduct" checked>
+                                        <span>Include product mentions</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="includeCTA" checked>
+                                        <span>Include call-to-action</span>
+                                    </label>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="includeHashtags" checked>
+                                        <span>Include relevant hashtags</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="response-length">
+                                <label>Response Length</label>
+                                <select id="responseLength">
+                                    <option value="short">Short (50-100 chars)</option>
+                                    <option value="medium" selected>Medium (100-200 chars)</option>
+                                    <option value="long">Long (200-280 chars)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-generation">
+                            <div class="selected-tweet" id="selectedTweet">
+                                <h4>Selected Tweet</h4>
+                                <div class="tweet-content" id="tweetContent">
+                                    <!-- Selected tweet content will appear here -->
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" id="generateResponse">
+                                <i class="fas fa-magic"></i>
+                                Generate AI Response
+                            </button>
+                            
+                            <div class="generated-response" id="generatedResponse">
+                                <h4>Generated Response</h4>
+                                <div class="response-content" id="responseContent">
+                                    <!-- Generated response will appear here -->
+                                </div>
+                                <div class="response-actions">
+                                    <button class="btn btn-secondary" id="copyResponse">
+                                        <i class="fas fa-copy"></i>
+                                        Copy Response
+                                    </button>
+                                    <button class="btn btn-secondary" id="regenerateResponse">
+                                        <i class="fas fa-redo"></i>
+                                        Regenerate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Engagement Section -->
+                <section id="engagement" class="content-section">
+                    <div class="engagement-container">
+                        <div class="engagement-header">
+                            <h3>Engagement Manager</h3>
+                            <p>Track and manage your Twitter engagements</p>
+                        </div>
+                        
+                        <div class="engagement-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-reply"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-number" id="totalReplies">0</span>
+                                    <span class="stat-label">Total Replies</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-number" id="totalLikes">0</span>
+                                    <span class="stat-label">Total Likes</span>
+                                </div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-retweet"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-number" id="totalRetweets">0</span>
+                                    <span class="stat-label">Total Retweets</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="engagement-history">
+                            <h4>Recent Engagements</h4>
+                            <div class="engagement-list" id="engagementList">
+                                <!-- Engagement history will appear here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Analytics Section -->
+                <section id="analytics" class="content-section">
+                    <div class="analytics-container">
+                        <div class="analytics-header">
+                            <h3>Analytics Dashboard</h3>
+                            <p>Track performance and engagement metrics</p>
+                        </div>
+                        
+                        <div class="analytics-grid">
+                            <div class="chart-card">
+                                <h4>Engagement Over Time</h4>
+                                <div class="chart-container" id="engagementChart">
+                                    <!-- Chart will be rendered here -->
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <h4>Top Performing Topics</h4>
+                                <div class="chart-container" id="topicsChart">
+                                    <!-- Chart will be rendered here -->
+                                </div>
+                            </div>
+                            
+                            <div class="chart-card">
+                                <h4>Response Performance</h4>
+                                <div class="chart-container" id="responseChart">
+                                    <!-- Chart will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="content-section">
+                    <div class="settings-container">
+                        <div class="settings-header">
+                            <h3>Settings</h3>
+                        </div>
+                        
+                        <div class="settings-content">
+                            <div class="setting-group">
+                                <h4>API Configuration</h4>
+                                <div class="setting-item">
+                                    <label>OpenAI API Key</label>
+                                    <input type="password" id="openaiKey" placeholder="Enter your OpenAI API key">
+                                </div>
+                                <div class="setting-item">
+                                    <label>Twitter API Key</label>
+                                    <input type="password" id="twitterKey" placeholder="Enter your Twitter API key">
+                                </div>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <h4>Product Information</h4>
+                                <div class="setting-item">
+                                    <label>Company Name</label>
+                                    <input type="text" id="companyName" placeholder="Your company name">
+                                </div>
+                                <div class="setting-item">
+                                    <label>Product Description</label>
+                                    <textarea id="productDescription" placeholder="Brief description of your product/service"></textarea>
+                                </div>
+                                <div class="setting-item">
+                                    <label>Website URL</label>
+                                    <input type="url" id="websiteUrl" placeholder="https://yourwebsite.com">
+                                </div>
+                            </div>
+                            
+                            <div class="setting-group">
+                                <h4>Preferences</h4>
+                                <div class="setting-item">
+                                    <label>Auto-save responses</label>
+                                    <input type="checkbox" id="autoSave" checked>
+                                </div>
+                                <div class="setting-item">
+                                    <label>Email notifications</label>
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                </div>
+                                <div class="setting-item">
+                                    <label>Dark Mode</label>
+                                    <input type="checkbox" id="darkMode">
+                                </div>
+                            </div>
+                            
+                            <div class="settings-actions">
+                                <button class="btn btn-primary" id="saveSettings">
+                                    <i class="fas fa-save"></i>
+                                    Save Settings
+                                </button>
+                                <button class="btn btn-secondary" id="resetSettings">
+                                    <i class="fas fa-undo"></i>
+                                    Reset to Default
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal">
+        <div class="modal-content loading-content">
+            <div class="loading-spinner"></div>
+            <h3 id="loadingText">Processing...</h3>
+            <p id="loadingSubtext">Please wait while we process your request</p>
+        </div>
+    </div>
+
+    <!-- Error Modal -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content error-content">
+            <div class="error-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Error</h3>
+            </div>
+            <p id="errorMessage">An error occurred. Please try again.</p>
+            <button class="btn btn-primary" id="closeErrorModal">OK</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

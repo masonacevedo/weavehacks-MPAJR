@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREEMASONRY - Design Implementation</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">⚜️</div>
+                    <h1>FREEMASONRY</h1>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item active">
+                        <a href="#dashboard" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#messages" class="nav-link">
+                            <i class="fas fa-comments"></i>
+                            <span>Messages</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#contacts" class="nav-link">
+                            <i class="fas fa-users"></i>
+                            <span>Contacts</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#documents" class="nav-link">
+                            <i class="fas fa-file-alt"></i>
+                            <span>Documents</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#events" class="nav-link">
+                            <i class="fas fa-calendar"></i>
+                            <span>Events</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="https://via.placeholder.com/40x40/ffd700/1a1a2e?text=U" alt="User Avatar">
+                    </div>
+                    <div class="user-info">
+                        <h4>Brother User</h4>
+                        <p>Online</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h2 id="page-title">Dashboard</h2>
+                    <p id="page-subtitle">Welcome to the brotherhood</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-container">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search..." class="search-input">
+                    </div>
+                    <div class="header-actions">
+                        <button class="notification-btn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                        <button class="profile-btn">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Sections -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="dashboard-grid">
+                        <div class="card stats-card">
+                            <div class="card-header">
+                                <h3>Quick Stats</h3>
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="stat-item">
+                                    <span class="stat-number">127</span>
+                                    <span class="stat-label">Active Members</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number">23</span>
+                                    <span class="stat-label">New Messages</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number">5</span>
+                                    <span class="stat-label">Upcoming Events</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card recent-activity">
+                            <div class="card-header">
+                                <h3>Recent Activity</h3>
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>New member joined the lodge</p>
+                                        <span class="activity-time">2 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-calendar-check"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>Monthly meeting scheduled</p>
+                                        <span class="activity-time">1 day ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-file-upload"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>New document uploaded</p>
+                                        <span class="activity-time">3 days ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card upcoming-events">
+                            <div class="card-header">
+                                <h3>Upcoming Events</h3>
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                            <div class="card-content">
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">15</span>
+                                        <span class="month">DEC</span>
+                                    </div>
+                                    <div class="event-details">
+                                        <h4>Monthly Lodge Meeting</h4>
+                                        <p>7:00 PM - Main Hall</p>
+                                    </div>
+                                </div>
+                                <div class="event-item">
+                                    <div class="event-date">
+                                        <span class="day">22</span>
+                                        <span class="month">DEC</span>
+                                    </div>
+                                    <div class="event-details">
+                                        <h4>Charity Fundraiser</h4>
+                                        <p>6:30 PM - Community Center</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Messages Section -->
+                <section id="messages" class="content-section">
+                    <div class="messages-container">
+                        <div class="messages-header">
+                            <h3>Messages</h3>
+                            <button class="new-message-btn">
+                                <i class="fas fa-plus"></i>
+                                New Message
+                            </button>
+                        </div>
+                        <div class="messages-list" id="messagesList">
+                            <!-- Messages will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contacts Section -->
+                <section id="contacts" class="content-section">
+                    <div class="contacts-container">
+                        <div class="contacts-header">
+                            <h3>Contacts</h3>
+                            <div class="contacts-search">
+                                <i class="fas fa-search"></i>
+                                <input type="text" placeholder="Search contacts..." id="contactSearch">
+                            </div>
+                        </div>
+                        <div class="contacts-list" id="contactsList">
+                            <!-- Contacts will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Documents Section -->
+                <section id="documents" class="content-section">
+                    <div class="documents-container">
+                        <div class="documents-header">
+                            <h3>Documents</h3>
+                            <button class="upload-btn">
+                                <i class="fas fa-upload"></i>
+                                Upload Document
+                            </button>
+                        </div>
+                        <div class="documents-grid" id="documentsGrid">
+                            <!-- Documents will be dynamically loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Events Section -->
+                <section id="events" class="content-section">
+                    <div class="events-container">
+                        <div class="events-header">
+                            <h3>Events</h3>
+                            <button class="new-event-btn">
+                                <i class="fas fa-plus"></i>
+                                New Event
+                            </button>
+                        </div>
+                        <div class="events-calendar" id="eventsCalendar">
+                            <!-- Events calendar will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="content-section">
+                    <div class="settings-container">
+                        <div class="settings-header">
+                            <h3>Settings</h3>
+                        </div>
+                        <div class="settings-content">
+                            <div class="setting-group">
+                                <h4>Notifications</h4>
+                                <div class="setting-item">
+                                    <label>Email Notifications</label>
+                                    <input type="checkbox" id="emailNotifications" checked>
+                                </div>
+                                <div class="setting-item">
+                                    <label>Push Notifications</label>
+                                    <input type="checkbox" id="pushNotifications" checked>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <h4>Privacy</h4>
+                                <div class="setting-item">
+                                    <label>Profile Visibility</label>
+                                    <select id="profileVisibility">
+                                        <option value="public">Public</option>
+                                        <option value="members">Members Only</option>
+                                        <option value="private">Private</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="setting-group">
+                                <h4>Theme</h4>
+                                <div class="setting-item">
+                                    <label>Dark Mode</label>
+                                    <input type="checkbox" id="darkMode">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for New Message -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>New Message</h3>
+                <button class="close-btn" id="closeMessageModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>To:</label>
+                    <select id="messageRecipient">
+                        <option value="">Select recipient...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Subject:</label>
+                    <input type="text" id="messageSubject" placeholder="Enter subject...">
+                </div>
+                <div class="form-group">
+                    <label>Message:</label>
+                    <textarea id="messageContent" placeholder="Type your message..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelMessage">Cancel</button>
+                <button class="btn btn-primary" id="sendMessage">Send Message</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
