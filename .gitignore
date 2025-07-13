@@ -5,6 +5,7 @@ postgresql/
 .env
 xtoken
 
+venv/
 node_modules/
 .idea/workspace.xml
 .next/

@@ -3,4 +3,5 @@ python-dotenv
 psycopg2-binary
 flask==2.3.3
 flask-cors==4.0.0
-huggingface-hub>=0.20.0 
+huggingface-hub>=0.20.0
+weave==0.51.56

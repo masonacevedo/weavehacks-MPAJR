@@ -1,16 +1,24 @@
 # weavehacks-MPAJR
+
 In order to run `main.py`, first make a venv:
 
-`python -m venv your_env`
+```
+rm -rf venv
+virtualenv -p python3.12 venv
+. venv/bin/activate
+pip install --upgrade pip
 
-Then activate the environment:
+pip install -r requirements.txt
+```
 
-`source your_env/bin/activate`
+# Run the backend
 
-Then, once in your environment, install weave:
+```
+python main.py
+```
 
-`pip install weave`
+# Afterwards
 
-Then run `main.py`:
-
-`python main.py`
+```
+deactivate
+```
