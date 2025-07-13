@@ -9,6 +9,8 @@ topics = [
     { "id": 3, "topic": "AI ethics"}
 ]
 
+conn = psycopg2.connect(dbname="weavehacks", user='postgres', password='password', host='localhost', port='5432')
+
 app = Flask(__name__)
 
 @app.route("/health", methods=["GET"])
@@ -29,7 +31,13 @@ def set_topic():
 
 @app.route("/topics", methods=["GET"])
 def get_topic():
-    # Here you would typically retrieve the topic from a database or file
+    topics = []
+    cursor = conn.cursor()
+    cursor.execute("SELECT topic_id, subject FROM topics")
+    rows = cursor.fetchall()
+    for row in rows:
+        topics.append({"id": row[0], "topic": row[1]})
+    cursor.close()
     response = {
         "data": topics,
         "count": len(topics)
@@ -44,20 +52,22 @@ def get_topic_by_id(topic_id):
         2: "machine learning",
         3: "AI ethics"
     }
-    topic = topics.get(topic_id)
+    cursor = conn.cursor()
+    cursor.execute("SELECT topic_id, subject FROM topics where topic_id = %s", (topic_id,))
+    row = cursor.fetchone()
+    if row:
+        topic = {"id": row[0], "topic": row[1]}
+    cursor.close()
     if not topic:
         return jsonify({"error": "Topic not found"}), 404
     
     return jsonify({"id": topic_id, "topic": topic}), 200
  
-@app.route("/topics/<int:topic_id>", methods=["DELETE"])
-def delete_topic(topic_id):
-    # Here you would typically delete the topic from a database or file
-    print(f"Topic with ID {topic_id} deleted")
-    return jsonify({"message": "Topic deleted"}), 204
-
 @app.route("/topics/<int:topic_id>/suggestion", methods=["GET"])
 def get_suggestions(topic_id):
     # Here you would typically retrieve suggestions for the topic from a database or file
     suggestion = "The world is exploring BCI as fast as Elon Musk is."
     return jsonify({"data": suggestion }), 200
+
+
+app.run(port=8181)
