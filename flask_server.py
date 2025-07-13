@@ -39,9 +39,11 @@ def analyze_tweet():
         tweet_text = data['tweet_text']
         username = data['username']
         
-        logger.info(f"Analyzing tweet from @{username}: {tweet_text[:100]}...")
-        tone = "Casual"
-        resp_type = "Opposing"
+        # Get tone and style parameters (with defaults)
+        tone = data.get('tone', 'Casual') if data else 'Casual'
+        resp_type = data.get('style', 'Problem-solving') if data else 'Problem-solving'
+        
+        logger.info(f"Analyzing tweet from @{username}: {tweet_text[:100]}... (Tone: {tone}, Style: {resp_type})")
         
         # Prepare the prompt for the AI model
         prompt = f"""
@@ -114,7 +116,14 @@ Original tweet by @{username}: "{tweet_text}"
             ],
         )
         
-        response_text = completion.choices[0].message.content
+        if not completion.choices or len(completion.choices) == 0:
+            raise Exception("No response generated from API")
+        
+        first_choice = completion.choices[0]
+        if not first_choice or not first_choice.message:
+            raise Exception("Invalid response structure from API")
+        
+        response_text = first_choice.message.content
         
         logger.info(f"Generated response: {response_text[:100]}...")
         

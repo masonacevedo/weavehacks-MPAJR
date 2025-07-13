@@ -16,6 +16,16 @@ const processingResult = document.getElementById('processingResult');
 const resultContent = document.getElementById('resultContent');
 const generateResponseBtn = document.getElementById('generateResponseBtn');
 
+// Slider elements
+const toneSlider = document.getElementById('toneSlider');
+const toneValue = document.getElementById('toneValue');
+const styleSlider = document.getElementById('styleSlider');
+const styleValue = document.getElementById('styleValue');
+
+// Slider value mappings
+const toneOptions = ['Casual', 'Neutral', 'Professional'];
+const styleOptions = ['Problem-solving', 'Engaging', 'Opposing'];
+
 // Function to update the status message
 function updateStatus(message) {
     console.log('Status update:', message);
@@ -192,13 +202,37 @@ async function generateChatGPTResponse() {
     }
 }
 
+// Function to get current slider values
+function getSliderValues() {
+    const toneIndex = parseInt(toneSlider.value);
+    const styleIndex = parseInt(styleSlider.value);
+    
+    return {
+        tone: toneOptions[toneIndex],
+        style: styleOptions[styleIndex]
+    };
+}
+
+// Function to update slider display values
+function updateSliderDisplay() {
+    const toneIndex = parseInt(toneSlider.value);
+    const styleIndex = parseInt(styleSlider.value);
+    
+    toneValue.textContent = toneOptions[toneIndex];
+    styleValue.textContent = styleOptions[styleIndex];
+}
+
 // Call Flask server to get AI response
 async function callFlaskServer(tweet) {
     const serverUrl = 'http://localhost:5001/analyze_tweet';
     
+    const sliderValues = getSliderValues();
+    
     const requestData = {
         tweet_text: tweet.text,
-        username: tweet.username
+        username: tweet.username,
+        tone: sliderValues.tone,
+        style: sliderValues.style
     };
     
     console.log('Calling Flask server with data:', requestData);
@@ -336,6 +370,13 @@ function handleMessage(message) {
 refreshBtn.addEventListener('click', requestTweets);
 processBtn.addEventListener('click', showProcessingScreen);
 backBtn.addEventListener('click', hideProcessingScreen);
+
+// Slider event listeners
+toneSlider.addEventListener('input', updateSliderDisplay);
+styleSlider.addEventListener('input', updateSliderDisplay);
+
+// Initialize slider displays
+updateSliderDisplay();
 
 // Listen for messages from background script
 chrome.runtime.onMessage.addListener(handleMessage);

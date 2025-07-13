@@ -349,6 +349,70 @@
         .copy-btn:hover {
             background: #1991db;
         }
+        
+        /* Slider styles */
+        .slider-container {
+            margin-bottom: 20px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #14171a;
+        }
+        
+        .slider-value {
+            font-size: 12px;
+            color: #657786;
+            background: #f7f9fa;
+            padding: 4px 8px;
+            border-radius: 12px;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e1e8ed;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #1da1f2;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #1da1f2;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .slider-endpoints {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #657786;
+            margin-top: 4px;
+        }
     </style>
 </head>
 <body>
@@ -382,10 +446,36 @@
         </div>
         
         <div class="processing-options">
-            <h3>Generate Response</h3>
-            <p style="color: #657786; font-size: 14px; margin-bottom: 16px;">
-                Generate a thoughtful response to this tweet using AI
-            </p>
+            <h3>Response Settings</h3>
+            
+            <!-- Tone Slider -->
+            <div class="slider-container">
+                <div class="slider-label">
+                    <span>Tone</span>
+                    <span class="slider-value" id="toneValue">Casual</span>
+                </div>
+                <input type="range" min="0" max="2" value="0" class="slider" id="toneSlider">
+                <div class="slider-endpoints">
+                    <span>Casual</span>
+                    <span>Neutral</span>
+                    <span>Professional</span>
+                </div>
+            </div>
+            
+            <!-- Style Slider -->
+            <div class="slider-container">
+                <div class="slider-label">
+                    <span>Style</span>
+                    <span class="slider-value" id="styleValue">Problem-solving</span>
+                </div>
+                <input type="range" min="0" max="2" value="0" class="slider" id="styleSlider">
+                <div class="slider-endpoints">
+                    <span>Problem-solving</span>
+                    <span>Engaging</span>
+                    <span>Opposing</span>
+                </div>
+            </div>
+            
             <button id="generateResponseBtn" class="generate-btn">
                 <span class="btn-icon">🤖</span>
                 <span class="btn-text">Generate AI Response</span>
