@@ -153,7 +153,7 @@ function hideProcessingScreen() {
     updateSelectionStatus();
 }
 
-// Function to generate ChatGPT response
+// Function to generate AI response using Flask server
 async function generateChatGPTResponse() {
     const selectedTweet = currentTweets[selectedTweetIndex];
     
@@ -162,20 +162,8 @@ async function generateChatGPTResponse() {
     processingResult.style.display = 'block';
     
     try {
-        // Prepare the prompt for ChatGPT
-        const prompt = `Generate a thoughtful, engaging response to this tweet. The response should be:
-        - Relevant and contextual to the original tweet
-        - Engaging and conversational in tone
-        - Appropriate for social media (under 280 characters if possible)
-        - Professional yet friendly
-        
-        Original tweet by @${selectedTweet.username}: "${selectedTweet.text}"
-        
-        Please provide just the response text without any additional formatting or explanations.`;
-        
-        // For now, we'll simulate the API call
-        // In a real implementation, you would call the ChatGPT API here
-        const response = await simulateChatGPTCall(prompt);
+        // Call the Flask server
+        const response = await callFlaskServer(selectedTweet);
         
         // Display the result
         resultContent.innerHTML = `
@@ -197,33 +185,49 @@ async function generateChatGPTResponse() {
                 <strong>Error:</strong> Failed to generate response. Please try again.
                 <br><br>
                 <small>Error details: ${error.message}</small>
+                <br><br>
+                <small>Make sure the Flask server is running on port 5001</small>
             </div>
         `;
     }
 }
 
-// Simulate ChatGPT API call (replace with actual API call)
-async function simulateChatGPTCall(prompt) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 2000));
+// Call Flask server to get AI response
+async function callFlaskServer(tweet) {
+    const serverUrl = 'http://localhost:5001/analyze_tweet';
     
-    // Generate a contextual response based on the tweet content
-    const tweetText = prompt.match(/Original tweet by @\w+: "(.*?)"/)?.[1] || '';
+    const requestData = {
+        tweet_text: tweet.text,
+        username: tweet.username
+    };
     
-    // Simple response generation logic (replace with actual ChatGPT API)
-    const responses = [
-        "That's an interesting perspective! Thanks for sharing this thought. 🤔",
-        "I can see where you're coming from with this. It's definitely something worth discussing! 💭",
-        "This is a great point! It really makes you think about the bigger picture. 👏",
-        "Thanks for bringing this up! It's an important conversation to have. 🙏",
-        "I appreciate you sharing this insight. It adds valuable context to the discussion! ✨",
-        "This is such a thoughtful observation. It really resonates with me! 💯",
-        "You've made an excellent point here. It's definitely food for thought! 🧠",
-        "I love how you've framed this! It's a fresh perspective on the topic. 🌟"
-    ];
+    console.log('Calling Flask server with data:', requestData);
     
-    // Return a random response (in real implementation, this would be the ChatGPT response)
-    return responses[Math.floor(Math.random() * responses.length)];
+    const response = await fetch(serverUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+        throw new Error(data.error);
+    }
+    
+    if (!data.response) {
+        throw new Error('No response received from server');
+    }
+    
+    console.log('Received response from Flask server:', data.response);
+    return data.response;
 }
 
 // Function to copy text to clipboard
