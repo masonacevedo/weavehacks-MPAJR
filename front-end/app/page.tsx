@@ -4,28 +4,23 @@ import styles from "./page.module.css";
 import Link from "next/link";
 
 import {analyzeTweet} from "./redux/tweetsSlice";
-import {useState} from "react";
-import {useDispatch} from "react-redux";
+import {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 
 export default function PostsOpener() {
   const dispatch = useDispatch();
 
-  const messages = [
-    {text: "Welcome to Barracuda474!", type: "user"},
-    {text: "Your dashboard is ready", type: "user"},
-    {text: "Manage your account settings easily.", type: "user"},
-    {text: "Explore the features available.", type: "user"},
-    {text: "Stay updated with the latest news.", type: "user"},
-  ]
-
   const [query, setQuery] = useState("");
+  const messages = useSelector((state) => state.tweets.messages)
+
+  useEffect(() => {
+  }, [messages]);
 
   function submitQueryHandler(e) {
     e?.preventDefault()
     console.log("Submitting query:", query);
-    dispatch(analyzeTweet({ text: query }));
+    dispatch(analyzeTweet({ username: "bob", text: query }));
   }
-
 
   return (
     <div className={styles.page}>
