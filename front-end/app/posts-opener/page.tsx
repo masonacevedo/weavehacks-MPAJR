@@ -5,13 +5,13 @@ import styles from "./page.module.css";
 export default function PostsOpener() {
   return (
     <div className={styles.page}>
-      <div className="app-container">
+      <div className={styles.appContainer}>
         {/* Header */}
-        <div className="header">
-          <div className="logo-section">
-            <div className="logo-text">BARRACUDA474</div>
-            <div className="profile-circle">
-              <div className="menu-icon" onClick={() => toggleMobileMenu()}>
+        <div className={styles.header}>
+          <div className={styles.logoSection}>
+            <div className={styles.logoText}>BARRACUDA474</div>
+            <div className={styles.profileCircle}>
+              <div className={styles.menuIcon} onClick={() => toggleMobileMenu()}>
                 <span></span>
                 <span></span>
                 <span></span>
@@ -21,31 +21,31 @@ export default function PostsOpener() {
         </div>
 
         {/* Mobile Menu */}
-        <div className="mobile-menu" id="mobileMenu">
-          <div className="mobile-menu-item" onClick={() => selectMenuItem('Dashboard')}>Dashboard</div>
-          <div className="mobile-menu-item" onClick={() => selectMenuItem('Profile')}>Profile</div>
-          <div className="mobile-menu-item" onClick={() => selectMenuItem('Settings')}>Settings</div>
-          <div className="mobile-menu-item" onClick={() => selectMenuItem('Analytics')}>Analytics</div>
-          <div className="mobile-menu-item" onClick={() => selectMenuItem('Messages')}>Messages</div>
+        <div className={styles.mobileMenu} id="mobileMenu">
+          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Dashboard')}>Dashboard</div>
+          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Profile')}>Profile</div>
+          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Settings')}>Settings</div>
+          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Analytics')}>Analytics</div>
+          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Messages')}>Messages</div>
         </div>
 
         {/* Overlay */}
-        <div className="overlay" id="overlay" onClick={() => toggleMobileMenu()}></div>
+        <div className={styles.overlay} id="overlay" onClick={() => toggleMobileMenu()}></div>
 
         {/* Main Content */}
-        <div className="main-content">
+        <div className={styles.mainContent}>
           {/* Sidebar (Desktop) */}
-          <div className="sidebar">
-            <div className="sidebar-item" onClick={() => selectMenuItem('Dashboard')}>Dashboard</div>
-            <div className="sidebar-item" onClick={() => selectMenuItem('Profile')}>Profile</div>
-            <div className="sidebar-item" onClick={() => selectMenuItem('Settings')}>Settings</div>
-            <div className="sidebar-item" onClick={() => selectMenuItem('Analytics')}>Analytics</div>
-            <div className="sidebar-item" onClick={() => selectMenuItem('Messages')}>Messages</div>
+          <div className={styles.sidebar}>
+            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Dashboard')}>Dashboard</div>
+            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Profile')}>Profile</div>
+            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Settings')}>Settings</div>
+            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Analytics')}>Analytics</div>
+            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Messages')}>Messages</div>
           </div>
 
           {/* Content Area */}
-          <div className="content-area">
-            <div className="content-placeholder" id="contentArea">
+          <div className={styles.contentArea}>
+            <div className={styles.contentPlaceholder} id="contentArea">
               <h2>Welcome to Barracuda474</h2>
               <p>Select an option from the menu to get started.</p>
             </div>
