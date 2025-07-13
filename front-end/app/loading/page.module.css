@@ -14,7 +14,7 @@
   padding: 20px;
 }
 
-.logo-container {
+.logoContainer {
   position: relative;
   width: 433px;
   height: 433px;
@@ -29,13 +29,13 @@
   transition: transform 0.3s ease;
 }
 
-.logo-container:hover {
+.logoContainer:hover {
   transform: scale(1.05);
 }
 
 /* Tablet styles */
 @media (max-width: 768px) {
-  .logo-container {
+  .logoContainer {
     width: 350px;
     height: 350px;
   }
@@ -47,7 +47,7 @@
     padding: 15px;
   }
 
-  .logo-container {
+  .logoContainer {
     width: 280px;
     height: 280px;
   }
@@ -62,7 +62,7 @@
 }
 
 /* Maintain aspect ratio */
-.logo-container {
+.logoContainer {
   aspect-ratio: 1 / 1;
 }
 
@@ -78,12 +78,12 @@
   }
 }
 
-.logo-container {
+.logoContainer {
   animation: fadeIn 0.8s ease-out;
 }
 
 /* Add a decorative border */
-.logo-container::before {
+.logoContainer::before {
   content: '';
   position: absolute;
   top: -5px;

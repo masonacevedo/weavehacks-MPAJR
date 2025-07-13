@@ -1,11 +1,17 @@
 .page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.page * {
   font-family: 'Poppins', sans-serif;
   background: #CCB67A;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-.app-container {
+.appContainer {
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -28,13 +34,13 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.header-content {
+.headerContent {
   display: flex;
   align-items: center;
   gap: 15px;
 }
 
-.logo-section {
+.logoSection {
   display: flex;
   align-items: center;
   background: #EFEBBD;
@@ -44,12 +50,12 @@
   transition: all 0.3s ease;
 }
 
-.logo-section:hover {
+.logoSection:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-.logo-text {
+.logoText {
   font-weight: 700;
   font-size: 24px;
   line-height: 36px;
@@ -57,11 +63,11 @@
   margin-right: 15px;
 }
 
-.profile-menu {
+.profileMenu {
   position: relative;
 }
 
-.profile-circle {
+.profileCircle {
   width: 67px;
   height: 67px;
   background: #896400;
@@ -74,19 +80,19 @@
   box-shadow: 0 4px 15px rgba(137, 100, 0, 0.3);
 }
 
-.profile-circle:hover {
+.profileCircle:hover {
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(137, 100, 0, 0.4);
 }
 
-.menu-icon {
+.menuIcon {
   width: 43px;
   height: 43px;
   position: relative;
   cursor: pointer;
 }
 
-.menu-icon span {
+.menuIcon span {
   display: block;
   width: 100%;
   height: 4px;
@@ -96,20 +102,20 @@
   transition: all 0.3s ease;
 }
 
-.menu-icon.active span:nth-child(1) {
+.menuIcon.active span:nth-child(1) {
   transform: rotate(45deg) translate(8px, 8px);
 }
 
-.menu-icon.active span:nth-child(2) {
+.menuIcon.active span:nth-child(2) {
   opacity: 0;
 }
 
-.menu-icon.active span:nth-child(3) {
+.menuIcon.active span:nth-child(3) {
   transform: rotate(-45deg) translate(8px, -8px);
 }
 
 /* Main Content Area */
-.main-content {
+.mainContent {
   position: relative;
   width: 100%;
   min-height: calc(100vh - 110px);
@@ -120,17 +126,17 @@
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
 }
 
-.content-wrapper {
+.contentWrapper {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.welcome-section {
+.welcomeSection {
   text-align: center;
   margin-bottom: 50px;
 }
 
-.welcome-title {
+.welcomeTitle {
   font-size: 48px;
   font-weight: 700;
   color: #896400;
@@ -138,21 +144,21 @@
   animation: fadeInUp 1s ease-out;
 }
 
-.welcome-subtitle {
+.welcomeSubtitle {
   font-size: 20px;
   color: #896400;
   opacity: 0.8;
   animation: fadeInUp 1s ease-out 0.2s both;
 }
 
-.feature-grid {
+.featureGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
   margin-top: 50px;
 }
 
-.feature-card {
+.featureCard {
   background: rgba(204, 182, 122, 0.2);
   padding: 30px;
   border-radius: 20px;
@@ -162,34 +168,34 @@
   animation: fadeInUp 1s ease-out 0.4s both;
 }
 
-.feature-card:hover {
+.featureCard:hover {
   transform: translateY(-10px);
   background: rgba(204, 182, 122, 0.3);
   border-color: #896400;
   box-shadow: 0 15px 40px rgba(137, 100, 0, 0.2);
 }
 
-.feature-icon {
+.featureIcon {
   font-size: 48px;
   margin-bottom: 20px;
   color: #896400;
 }
 
-.feature-title {
+.featureTitle {
   font-size: 24px;
   font-weight: 700;
   color: #896400;
   margin-bottom: 15px;
 }
 
-.feature-description {
+.featureDescription {
   color: #896400;
   opacity: 0.8;
   line-height: 1.6;
 }
 
 /* Dropdown Menu */
-.dropdown-menu {
+.dropdownMenu {
   position: absolute;
   top: 80px;
   right: 0;
@@ -204,13 +210,13 @@
   min-width: 200px;
 }
 
-.dropdown-menu.active {
+.dropdownMenu.active {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-.dropdown-item {
+.dropdownItem {
   padding: 12px 16px;
   color: #896400;
   cursor: pointer;
@@ -220,169 +226,11 @@
   font-weight: 500;
 }
 
-.dropdown-item:hover {
+.dropdownItem:hover {
   background: #CCB67A;
   transform: translateX(5px);
 }
 
-.dropdown-item:last-child {
+.dropdownItem:last-child {
   margin-bottom: 0;
-}
-
-/* Animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .header {
-    height: 80px;
-    padding: 0 15px;
-  }
-
-  .logo-section {
-    padding: 10px 15px;
-  }
-
-  .logo-text {
-    font-size: 18px;
-    line-height: 24px;
-    margin-right: 10px;
-  }
-
-  .profile-circle {
-    width: 50px;
-    height: 50px;
-  }
-
-  .menu-icon {
-    width: 30px;
-    height: 30px;
-  }
-
-  .menu-icon span {
-    height: 3px;
-    margin: 5px 0;
-  }
-
-  .main-content {
-    margin-top: 80px;
-    min-height: calc(100vh - 80px);
-    padding: 20px;
-    border-radius: 20px 20px 0 0;
-  }
-
-  .welcome-title {
-    font-size: 32px;
-  }
-
-  .welcome-subtitle {
-    font-size: 16px;
-  }
-
-  .feature-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-
-  .feature-card {
-    padding: 20px;
-  }
-
-  .dropdown-menu {
-    right: 10px;
-    top: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .header {
-    height: 70px;
-    padding: 0 10px;
-  }
-
-  .logo-section {
-    padding: 8px 12px;
-  }
-
-  .logo-text {
-    font-size: 16px;
-    line-height: 20px;
-  }
-
-  .profile-circle {
-    width: 45px;
-    height: 45px;
-  }
-
-  .menu-icon {
-    width: 25px;
-    height: 25px;
-  }
-
-  .main-content {
-    margin-top: 70px;
-    min-height: calc(100vh - 70px);
-    padding: 15px;
-    border-radius: 15px 15px 0 0;
-  }
-
-  .welcome-title {
-    font-size: 28px;
-  }
-
-  .welcome-subtitle {
-    font-size: 14px;
-  }
-
-  .feature-card {
-    padding: 15px;
-  }
-
-  .feature-title {
-    font-size: 20px;
-  }
-
-  .feature-icon {
-    font-size: 36px;
-  }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #2a2314;
-  }
-
-  .app-container {
-    background: #2a2314;
-  }
-
-  .header {
-    background: #2a2314;
-  }
-
-  .main-content {
-    background: #3d3525;
-  }
-
-  .dropdown-menu {
-    background: #3d3525;
-  }
-
-  .feature-card {
-    background: rgba(204, 182, 122, 0.1);
-  }
-
-  .feature-card:hover {
-    background: rgba(204, 182, 122, 0.2);
-  }
 }

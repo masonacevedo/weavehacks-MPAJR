@@ -35,7 +35,7 @@
   margin-bottom: 40px;
 }
 
-.form-container {
+.formContainer {
   width: 100%;
   max-width: 500px;
   display: flex;
@@ -43,20 +43,20 @@
   gap: 20px;
 }
 
-.input-group {
+.inputGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.input-label {
+.inputLabel {
   font-weight: 700;
   font-size: 24px;
   color: #EFEBBD;
   margin-left: 10px;
 }
 
-.input-field {
+.inputField {
   background: #896400;
   border: none;
   border-radius: 30px;
@@ -69,16 +69,16 @@
   transition: all 0.3s ease;
 }
 
-.input-field::placeholder {
+.inputField::placeholder {
   color: rgba(239, 235, 189, 0.3);
 }
 
-.input-field:focus {
+.inputField:focus {
   background: #9A7200;
   transform: scale(1.02);
 }
 
-.button-group {
+.buttonGroup {
   display: flex;
   gap: 20px;
   margin-top: 30px;
@@ -100,23 +100,23 @@
   min-width: 140px;
 }
 
-.btn-login {
+.btnLogin {
   background: #EFEBBD;
   color: #896400;
 }
 
-.btn-login:hover {
+.btnLogin:hover {
   background: #F5F1D4;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
-.btn-signup {
+.btnSignup {
   background: #896400;
   color: #EFEBBD;
 }
 
-.btn-signup:hover {
+.btnSignup:hover {
   background: #9A7200;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
@@ -135,15 +135,15 @@
     margin-bottom: 30px;
   }
 
-  .form-container {
+  .formContainer {
     max-width: 100%;
   }
 
-  .input-label {
+  .inputLabel {
     font-size: 20px;
   }
 
-  .input-field {
+  .inputField {
     font-size: 20px;
     padding: 12px 25px;
   }
@@ -154,7 +154,7 @@
     min-width: 120px;
   }
 
-  .button-group {
+  .buttonGroup {
     flex-direction: column;
     gap: 15px;
   }
@@ -166,11 +166,11 @@
     height: 200px;
   }
 
-  .input-label {
+  .inputLabel {
     font-size: 18px;
   }
 
-  .input-field {
+  .inputField {
     font-size: 18px;
     padding: 10px 20px;
   }
@@ -193,7 +193,7 @@
     height: 320px;
   }
 
-  .form-container {
+  .formContainer {
     max-width: 450px;
   }
 }
@@ -235,7 +235,7 @@
 }
 
 /* Focus states for accessibility */
-.input-field:focus,
+.inputField:focus,
 .btn:focus {
   outline: 3px solid rgba(239, 235, 189, 0.5);
   outline-offset: 2px;
