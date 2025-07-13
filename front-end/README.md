@@ -2,6 +2,13 @@
 
 ## Getting Started
 
+
+Install the dependencies:
+
+
+```azure
+npm install
+```
 First, run the development server:
 
 ```bash
