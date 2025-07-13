@@ -1,0 +1,41 @@
+{
+  "name": "freemasonry-chrome-extension",
+  "version": "1.0.0",
+  "description": "A sophisticated Chrome extension for FREEMASONRY messaging and communication",
+  "main": "popup.html",
+  "scripts": {
+    "build": "echo 'No build process required for this extension'",
+    "test": "echo 'No tests specified'",
+    "lint": "echo 'No linting configured'",
+    "dev": "echo 'Load extension in Chrome developer mode'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "freemasonry",
+    "messaging",
+    "communication",
+    "brotherhood"
+  ],
+  "author": "FREEMASONRY Development Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/freemasonry/chrome-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/freemasonry/chrome-extension/issues"
+  },
+  "homepage": "https://github.com/freemasonry/chrome-extension#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "manifest": {
+    "version": 3,
+    "permissions": [
+      "activeTab",
+      "storage"
+    ]
+  }
+} 
