@@ -3,6 +3,11 @@ let currentTweets = [];
 let selectedTweetIndex = -1;
 let isGeneratingResponse = false; // Flag to prevent multiple simultaneous requests
 
+// Chat conversation state
+let conversationHistory = [];
+let currentResponse = '';
+let isSendingMessage = false;
+
 // DOM elements
 const statusElement = document.getElementById('status');
 const tweetsContainer = document.getElementById('tweetsContainer');
@@ -16,6 +21,20 @@ const selectedTweetDisplay = document.getElementById('selectedTweetDisplay');
 const processingResult = document.getElementById('processingResult');
 const resultContent = document.getElementById('resultContent');
 const generateResponseBtn = document.getElementById('generateResponseBtn');
+
+// Chat interface elements
+const chatInterface = document.getElementById('chatInterface');
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+// Debug chat interface elements
+console.log('Chat interface elements found:', {
+    chatInterface: !!chatInterface,
+    chatMessages: !!chatMessages,
+    chatInput: !!chatInput,
+    sendMessageBtn: !!sendMessageBtn
+});
 
 // Slider elements
 const toneSlider = document.getElementById('toneSlider');
@@ -157,6 +176,9 @@ function hideProcessingScreen() {
     tweetsContainer.style.display = 'block';
     processingScreen.style.display = 'none';
     
+    // Hide chat interface
+    hideChatInterface();
+    
     // Update selection status if there's still a selected tweet
     updateSelectionStatus();
 }
@@ -211,18 +233,34 @@ async function generateChatGPTResponse() {
         // Call the Flask server
         const response = await callFlaskServer(selectedTweet);
         
+        // Store the current response
+        currentResponse = response;
+        
         // Display the result
         resultContent.innerHTML = `
             <div class="response-container">
                 <h4>🤖 AI Generated Response:</h4>
                 <div class="response-text">${escapeHtml(response)}</div>
                 <div class="response-actions">
-                    <button class="copy-btn" onclick="copyToClipboard('${escapeHtml(response).replace(/'/g, "\\'")}')">
+                    <button class="copy-btn" data-response-text="${escapeHtml(response).replace(/"/g, '&quot;')}">
                         📋 Copy Response
+                    </button>
+                    <button class="refine-response-btn">
+                        💬 Refine Response
                     </button>
                 </div>
             </div>
         `;
+        
+        // Add event listeners to the new buttons
+        const copyBtn = resultContent.querySelector('.copy-btn');
+        const refineBtn = resultContent.querySelector('.refine-response-btn');
+        
+        copyBtn.addEventListener('click', () => {
+            copyToClipboard(copyBtn.getAttribute('data-response-text'));
+        });
+        
+        refineBtn.addEventListener('click', showChatInterface);
         
     } catch (error) {
         console.error('Error generating response:', error);
@@ -316,6 +354,55 @@ async function callFlaskServer(tweet) {
     return data.response;
 }
 
+// Call Flask server to get refined response
+async function callFlaskServerForRefinement(userMessage) {
+    if (selectedTweetIndex < 0 || selectedTweetIndex >= currentTweets.length) {
+        throw new Error('No tweet selected for refinement');
+    }
+    
+    const selectedTweet = currentTweets[selectedTweetIndex];
+    const serverUrl = 'http://localhost:5001/refine_response';
+    const sliderValues = getSliderValues();
+    
+    const requestData = {
+        tweet_text: selectedTweet.text,
+        username: selectedTweet.username,
+        current_response: currentResponse,
+        user_feedback: userMessage,
+        tone: sliderValues.tone,
+        style: sliderValues.style,
+        conversation_history: conversationHistory
+    };
+    
+    console.log('Calling Flask server for refinement with data:', requestData);
+    
+    const response = await fetch(serverUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData)
+    });
+    
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${response.status} - ${errorText}`);
+    }
+    
+    const data = await response.json();
+    
+    if (data.error) {
+        throw new Error(data.error);
+    }
+    
+    if (!data.response) {
+        throw new Error('No refined response received from server');
+    }
+    
+    console.log('Received refined response from Flask server:', data.response);
+    return data.response;
+}
+
 // Function to copy text to clipboard
 function copyToClipboard(text) {
     navigator.clipboard.writeText(text).then(() => {
@@ -333,6 +420,110 @@ function copyToClipboard(text) {
         console.error('Failed to copy text: ', err);
         alert('Failed to copy to clipboard');
     });
+}
+
+// Function to add a message to the chat
+function addChatMessage(content, isUser = false) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${isUser ? 'user' : 'ai'}`;
+    
+    const header = document.createElement('div');
+    header.className = 'chat-message-header';
+    header.textContent = isUser ? 'You' : 'AI Assistant';
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'chat-message-content';
+    messageContent.textContent = content;
+    
+    messageDiv.appendChild(header);
+    messageDiv.appendChild(messageContent);
+    
+    chatMessages.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    
+    // Add to conversation history
+    conversationHistory.push({
+        role: isUser ? 'user' : 'assistant',
+        content: content
+    });
+}
+
+// Function to clear chat interface
+function clearChatInterface() {
+    chatMessages.innerHTML = '';
+    conversationHistory = [];
+    currentResponse = '';
+    chatInput.value = '';
+}
+
+// Function to show chat interface
+function showChatInterface() {
+    console.log('showChatInterface called');
+    console.log('chatInterface element:', chatInterface);
+    
+    if (!chatInterface) {
+        console.error('chatInterface element not found!');
+        return;
+    }
+    
+    chatInterface.style.display = 'block';
+    clearChatInterface();
+    
+    // Add initial AI message
+    addChatMessage('I\'ve generated a response for you. You can ask me to modify it in any way you\'d like!', false);
+    
+    console.log('Chat interface should now be visible');
+}
+
+// Function to hide chat interface
+function hideChatInterface() {
+    chatInterface.style.display = 'none';
+}
+
+// Function to send a message and get refined response
+async function sendMessage() {
+    if (isSendingMessage) return;
+    
+    const message = chatInput.value.trim();
+    if (!message) return;
+    
+    // Add user message to chat
+    addChatMessage(message, true);
+    chatInput.value = '';
+    
+    // Disable input while processing
+    isSendingMessage = true;
+    sendMessageBtn.disabled = true;
+    chatInput.disabled = true;
+    
+    try {
+        // Get refined response from Flask server
+        const refinedResponse = await callFlaskServerForRefinement(message);
+        
+        // Update the current response
+        currentResponse = refinedResponse;
+        
+        // Add AI response to chat
+        addChatMessage(refinedResponse, false);
+        
+        // Update the main response display
+        const responseTextElement = document.querySelector('.response-text');
+        if (responseTextElement) {
+            responseTextElement.textContent = refinedResponse;
+        }
+        
+    } catch (error) {
+        console.error('Error getting refined response:', error);
+        addChatMessage('Sorry, I encountered an error while refining the response. Please try again.', false);
+    } finally {
+        // Re-enable input
+        isSendingMessage = false;
+        sendMessageBtn.disabled = false;
+        chatInput.disabled = false;
+        chatInput.focus();
+    }
 }
 
 // Function to display tweets
@@ -443,6 +634,15 @@ refreshBtn.addEventListener('click', requestTweets);
 processBtn.addEventListener('click', showProcessingScreen);
 backBtn.addEventListener('click', hideProcessingScreen);
 generateResponseBtn.addEventListener('click', generateChatGPTResponse);
+
+// Chat interface event listeners
+sendMessageBtn.addEventListener('click', sendMessage);
+chatInput.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+    }
+});
 
 // Slider event listeners
 toneSlider.addEventListener('input', updateSliderDisplay);

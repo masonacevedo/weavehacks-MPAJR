@@ -413,6 +413,122 @@
             color: #657786;
             margin-top: 4px;
         }
+        
+        /* Chat Interface Styles */
+        .chat-interface {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e1e8ed;
+        }
+        
+        .chat-interface h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #14171a;
+        }
+        
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px;
+            background: #f7f9fa;
+        }
+        
+        .chat-message {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e1e8ed;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .chat-message:last-child {
+            border-bottom: none;
+        }
+        
+        .chat-message.user {
+            background: #e8f5fd;
+            border-left: 4px solid #1da1f2;
+        }
+        
+        .chat-message.ai {
+            background: white;
+            border-left: 4px solid #17bf63;
+        }
+        
+        .chat-message-header {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #657786;
+        }
+        
+        .chat-message-content {
+            color: #14171a;
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        
+        .chat-input {
+            flex: 1;
+            border: 1px solid #e1e8ed;
+            border-radius: 12px;
+            padding: 12px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 40px;
+            max-height: 120px;
+            outline: none;
+        }
+        
+        .chat-input:focus {
+            border-color: #1da1f2;
+            box-shadow: 0 0 0 2px rgba(29, 161, 242, 0.1);
+        }
+        
+        .send-message-btn {
+            background: #1da1f2;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .send-message-btn:hover {
+            background: #1991db;
+        }
+        
+        .send-message-btn:disabled {
+            background: #e1e8ed;
+            cursor: not-allowed;
+        }
+        
+        .refine-response-btn {
+            background: #17bf63;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: background 0.2s ease;
+        }
+        
+        .refine-response-btn:hover {
+            background: #15a052;
+        }
     </style>
 </head>
 <body>
@@ -486,6 +602,18 @@
             <h3>Processing Result:</h3>
             <div id="resultContent" class="result-content">
                 <!-- Results will be displayed here -->
+            </div>
+        </div>
+        
+        <!-- Chat Interface for Response Tweaking -->
+        <div id="chatInterface" class="chat-interface" style="display: none;">
+            <h3>💬 Refine Response</h3>
+            <div id="chatMessages" class="chat-messages">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="chat-input-container">
+                <textarea id="chatInput" class="chat-input" placeholder="Ask for changes to the response... (e.g., 'Make it more casual', 'Add more details', 'Make it shorter')"></textarea>
+                <button id="sendMessageBtn" class="send-message-btn">Send</button>
             </div>
         </div>
     </div>
