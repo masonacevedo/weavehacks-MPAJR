@@ -7,3 +7,4 @@ xtoken
 
 node_modules/
 .idea/workspace.xml
+.next/
