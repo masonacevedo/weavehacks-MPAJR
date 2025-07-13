@@ -515,7 +515,7 @@ class FreemasonryAuth {
 
     goToDashboard() {
         // Redirect to dashboard or home menu
-        window.location.href = '../home-menu/index.html';
+        window.location.href = '/home-menu/index.html';
     }
 
     setupFormValidation() {
