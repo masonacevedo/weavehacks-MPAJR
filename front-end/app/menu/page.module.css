@@ -1,10 +1,11 @@
 .page {
   font-family: Arial, sans-serif;
+  display: block;
 }
 
 .appContainer {
   width: 100%;
-  min-height: 100vh;
+  min-height: 10px;
   background: #CCB67A;
 }
 
@@ -60,4 +61,40 @@
 
 .backBtn:hover {
   background: #CCB67A;
+}
+
+
+.memberServices {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.lodgeOfficers {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.lodgeInformation {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.recentAnnouncements {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.upcomingEvents {
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
 }

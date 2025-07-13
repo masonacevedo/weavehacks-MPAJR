@@ -1,14 +1,14 @@
 .page * {
   font-family: 'Poppins', sans-serif;
   background: #CCB67A;
-  min-height: 100vh;
+  min-height: 10px;
   overflow-x: hidden;
 }
 
 .appContainer {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 10px;
   background: #CCB67A;
   padding: 10px;
 }
@@ -92,7 +92,7 @@
   padding: 20px;
   display: flex;
   gap: 20px;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100px - 80px);
 }
 
 .sidebar {
@@ -155,7 +155,7 @@
   top: 70px;
   left: -100%;
   width: 80%;
-  height: calc(100vh - 70px);
+  height: calc(100px - 70px);
   background: #EFEBBD;
   transition: left 0.3s ease;
   z-index: 999;

@@ -7,7 +7,7 @@
 .page {
   font-family: 'Poppins', sans-serif;
   background: #CCB67A;
-  min-height: 100vh;
+  min-height: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -125,7 +125,7 @@
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
-    min-height: 100vh;
+    min-height: 10px;
     padding: 20px;
   }
 
