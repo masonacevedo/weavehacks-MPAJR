@@ -5,5 +5,5 @@ postgresql/
 .env
 xtoken
 
-.node_modules
+node_modules/
 .idea/workspace.xml
