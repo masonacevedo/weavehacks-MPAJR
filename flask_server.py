@@ -3,6 +3,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from huggingface_hub import InferenceClient
 import logging
+import weave
+
+
+weave.init("weavehacks-MPAJR")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -27,6 +31,7 @@ def health_check():
     """Health check endpoint"""
     return jsonify({"status": "healthy", "message": "Flask server is running"})
 
+@weave.op()
 @app.route('/analyze_tweet', methods=['POST'])
 def analyze_tweet():
     """Analyze a tweet and generate a response using Hugging Face API"""
