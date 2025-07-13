@@ -4,3 +4,7 @@ __pycache__/
 postgresql/
 .env
 xtoken
+
+node_modules/
+.idea/workspace.xml
+.next/
