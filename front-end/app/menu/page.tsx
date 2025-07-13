@@ -2,7 +2,7 @@ import styles from "./page.module.css";
 
 export default function Menu() {
   return (
-    <div className={styles.page}>
+    <div>
       <div className="app-container">
         <div className="main-menu" id="mainMenu">
           <div className="logo-container">

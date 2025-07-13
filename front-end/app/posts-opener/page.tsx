@@ -2,7 +2,7 @@ import styles from "./page.module.css";
 
 export default function PostsOpener() {
   return (
-    <div className={styles.page}>
+    <div>
       <div className="app-container">
         <!-- Header -->
         <div className="header">
