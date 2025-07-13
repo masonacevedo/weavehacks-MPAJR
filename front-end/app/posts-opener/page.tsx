@@ -3,6 +3,15 @@
 import styles from "./page.module.css";
 
 export default function PostsOpener() {
+
+  const messages = [
+    {text: "Welcome to Barracuda474!", type: "user"},
+    {text: "Your dashboard is ready", type: "user"},
+    {text: "Manage your account settings easily.", type: "user"},
+    {text: "Explore the features available.", type: "user"},
+    {text: "Stay updated with the latest news.", type: "user"},
+  ]
+
   return (
     <div className={styles.page}>
       <div className={styles.appContainer}>
@@ -22,11 +31,15 @@ export default function PostsOpener() {
 
         {/* Mobile Menu */}
         <div className={styles.mobileMenu} id="mobileMenu">
-          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Dashboard')}>Dashboard</div>
-          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Profile')}>Profile</div>
-          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Settings')}>Settings</div>
-          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Analytics')}>Analytics</div>
-          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Messages')}>Messages</div>
+          <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Settings')}>Most
+            Recommended
+          </div>
+          <div className={styles.mobileMenuItem}
+               onClick={() => selectMenuItem('Analytics')}>Newest
+          </div>
+          <div className={styles.mobileMenuItem}
+               onClick={() => selectMenuItem('Messages')}>Trending
+          </div>
         </div>
 
         {/* Overlay */}
@@ -36,18 +49,33 @@ export default function PostsOpener() {
         <div className={styles.mainContent}>
           {/* Sidebar (Desktop) */}
           <div className={styles.sidebar}>
-            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Dashboard')}>Dashboard</div>
-            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Profile')}>Profile</div>
-            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Settings')}>Settings</div>
-            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Analytics')}>Analytics</div>
-            <div className={styles.sidebarItem} onClick={() => selectMenuItem('Messages')}>Messages</div>
+            <div className={styles.mobileMenuItem} onClick={() => selectMenuItem('Settings')}>Most
+              Recommended
+            </div>
+            <div className={styles.mobileMenuItem}
+                 onClick={() => selectMenuItem('Analytics')}>Newest
+            </div>
+            <div className={styles.mobileMenuItem}
+                 onClick={() => selectMenuItem('Messages')}>Trending
+            </div>
           </div>
 
           {/* Content Area */}
           <div className={styles.contentArea}>
             <div className={styles.contentPlaceholder} id="contentArea">
-              <h2>Welcome to Barracuda474</h2>
-              <p>Select an option from the menu to get started.</p>
+              {messages.map((message, index) => (
+                <div key={index} className={`${styles.message} ${styles[message.type]}`}>
+                  {message.text}
+                </div>
+              ))
+              }
+            </div>
+
+            <div styles={{ height: '500px' }}></div>
+
+            {/* Input Area */}
+            <div className={styles.message}>
+              <input name={"query"} styles={{'border': 'none'}} placeholder="Type your query here"/>
             </div>
           </div>
         </div>
