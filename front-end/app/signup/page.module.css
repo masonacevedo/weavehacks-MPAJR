@@ -1,0 +1,247 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.page {
+  font-family: 'Poppins', sans-serif;
+  background: #CCB67A;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1440px;
+  min-height: 960px;
+  position: relative;
+  background: #CCB67A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 400px;
+  height: 400px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><g fill="white"><circle cx="200" cy="150" r="80"/><polygon points="120,250 200,180 280,250 250,280 200,230 150,280"/><rect x="180" y="300" width="40" height="80"/><text x="200" y="380" text-anchor="middle" font-family="serif" font-size="24" fill="white">G</text></g></svg>') no-repeat center;
+  background-size: contain;
+  margin-bottom: 40px;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-label {
+  font-weight: 700;
+  font-size: 24px;
+  color: #EFEBBD;
+  margin-left: 10px;
+}
+
+.input-field {
+  background: #896400;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 30px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #EFEBBD;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.input-field::placeholder {
+  color: rgba(239, 235, 189, 0.3);
+}
+
+.input-field:focus {
+  background: #9A7200;
+  transform: scale(1.02);
+}
+
+.button-group {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 15px 35px;
+  border: none;
+  border-radius: 30px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  min-width: 140px;
+}
+
+.btn-login {
+  background: #EFEBBD;
+  color: #896400;
+}
+
+.btn-login:hover {
+  background: #F5F1D4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.btn-signup {
+  background: #896400;
+  color: #EFEBBD;
+}
+
+.btn-signup:hover {
+  background: #9A7200;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  .logo {
+    width: 250px;
+    height: 250px;
+    margin-bottom: 30px;
+  }
+
+  .form-container {
+    max-width: 100%;
+  }
+
+  .input-label {
+    font-size: 20px;
+  }
+
+  .input-field {
+    font-size: 20px;
+    padding: 12px 25px;
+  }
+
+  .btn {
+    font-size: 20px;
+    padding: 12px 25px;
+    min-width: 120px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 200px;
+    height: 200px;
+  }
+
+  .input-label {
+    font-size: 18px;
+  }
+
+  .input-field {
+    font-size: 18px;
+    padding: 10px 20px;
+  }
+
+  .btn {
+    font-size: 18px;
+    padding: 10px 20px;
+    width: 100%;
+  }
+}
+
+/* Tablet landscape */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    padding: 40px;
+  }
+
+  .logo {
+    width: 320px;
+    height: 320px;
+  }
+
+  .form-container {
+    max-width: 450px;
+  }
+}
+
+/* Large desktop */
+@media (min-width: 1441px) {
+  .container {
+    max-width: 1600px;
+  }
+}
+
+/* Animation effects */
+.container {
+  animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.logo {
+  animation: logoRotate 20s linear infinite;
+}
+
+@keyframes logoRotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus states for accessibility */
+.input-field:focus,
+.btn:focus {
+  outline: 3px solid rgba(239, 235, 189, 0.5);
+  outline-offset: 2px;
+}
+
+/* Loading state */
+.btn:active {
+  transform: scale(0.98);
+}
